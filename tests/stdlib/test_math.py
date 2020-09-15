@@ -31,11 +31,11 @@ class MathModuleTests(TranspileTestCase, NotImplementedToExpectedFailure):
     @expectedFailure
     def test_math_floor_inf_argument(self):
         self.assertCodeExecution("""
-            from math import floor, inf
-            test_arg = inf
+            from math import floor
+            test_arg = float("Infinity")
             print(floor(test_arg))
 
-            test_arg = -inf
+            test_arg = float("-Infinity")
             print(floor(test_arg))
             """)
 
