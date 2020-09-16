@@ -39,6 +39,9 @@ public class math extends org.python.types.Module {
             if (javaFloorArg != javaFloorArg) {
                 throw new org.python.exceptions.ValueError("Python cannot convert float NaN to integer");
             }
+        } else if (pyFloorArg instanceof org.python.types.Int) {
+            javaFloorArg = ((org.python.types.Int) pyFloorArg.__int__()).value;
+
         } else {
             throw new org.python.exceptions.TypeError("Floor not fully implemented yet; doesn't accept type " +
                 pyFloorArg.typeName() + ")");
