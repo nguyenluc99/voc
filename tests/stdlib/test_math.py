@@ -1,9 +1,9 @@
 from unittest import expectedFailure
 
-from ..utils import TranspileTestCase, NotImplementedToExpectedFailure
+from ..utils import TranspileTestCase
 
 
-class MathModuleTests(TranspileTestCase, NotImplementedToExpectedFailure):
+class MathModuleTests(TranspileTestCase):
     """
     Testing of Python3 math module methods with TranspileTestCase:
         * math.floor
@@ -27,6 +27,14 @@ class MathModuleTests(TranspileTestCase, NotImplementedToExpectedFailure):
             test_arg = "str"
             print(floor(test_arg))
             """)
+
+    @expectedFailure
+    def test_math_floor_NaN_argument(self):
+        self.assertCodeExecution("""
+                from math import floor
+                test_arg = float("nan")
+                print(floor(test_arg))
+                """)
 
     @expectedFailure
     def test_math_floor_inf_argument(self):
