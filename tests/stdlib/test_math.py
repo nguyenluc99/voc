@@ -76,5 +76,10 @@ class MathModuleTests(TranspileTestCase):
             test_arg = False
             print(floor(test_arg))
             """)
+    def test_ceil(self):
+        self.assertCodeExecution("""
+            import math
+            print(math.ceil(1.3))
+            """)
 
     #######################################################
