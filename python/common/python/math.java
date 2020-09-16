@@ -30,7 +30,15 @@ public class math extends org.python.types.Module {
         double javaFloorArg;
 
         if (pyFloorArg instanceof org.python.types.Float) {
-            javaFloorArg = (double)((org.python.types.Float) pyFloorArg.__float__()).value;
+            javaFloorArg = ((org.python.types.Float) pyFloorArg.__float__()).value;
+
+            if (javaFloorArg == Double.POSITIVE_INFINITY) {
+                throw new org.python.exceptions.OverflowError("Python cannot convert float infinity to integer");
+            }
+
+            if (javaFloorArg != javaFloorArg) {
+                throw new org.python.exceptions.ValueError("Python cannot convert float NaN to integer");
+            }
         } else {
             throw new org.python.exceptions.TypeError("Floor not fully implemented yet; doesn't accept type " +
                 pyFloorArg.typeName() + ")");
