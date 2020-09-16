@@ -23,7 +23,7 @@ public class math extends org.python.types.Module {
     @org.python.Method(
         __doc__ = "floor(pyFloorArg: number) -> integer\n" +
             "\n" +
-            "Returns the greatest interger less than or equal to a real number value input\n",
+            "Returns the greatest integer less than or equal to a real number value input\n",
         args = {"pyFloorArg"}
     )
     public static org.python.Object floor(org.python.Object pyFloorArg) {
@@ -32,7 +32,7 @@ public class math extends org.python.types.Module {
         if (pyFloorArg instanceof org.python.types.Float) {
             javaFloorArg = ((org.python.types.Float) pyFloorArg.__float__()).value;
 
-            if (javaFloorArg == Double.POSITIVE_INFINITY) {
+            if (javaFloorArg == Double.POSITIVE_INFINITY || javaFloorArg == Double.NEGATIVE_INFINITY) {
                 throw new org.python.exceptions.OverflowError("Python cannot convert float infinity to integer");
             }
 
