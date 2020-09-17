@@ -80,6 +80,13 @@ class MathModuleTests(TranspileTestCase):
         self.assertCodeExecution("""
             import math
             print(math.ceil(1.3))
+
+            print(print(math.ceil(-1.2)))
+
+            print(print(math.ceil(0)))
+
+            print(print(math.ceil(3)))
+
             """)
 
     #######################################################
