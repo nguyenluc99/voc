@@ -41,7 +41,12 @@ public class math extends org.python.types.Module {
             }
         } else if (pyFloorArg instanceof org.python.types.Int) {
             javaFloorArg = ((org.python.types.Int) pyFloorArg.__int__()).value;
-
+        } else if (pyFloorArg instanceof org.python.types.Bool) {
+            if (((org.python.types.Bool) pyFloorArg.__bool__()).value) {
+                javaFloorArg = 1.0;
+            } else {
+                javaFloorArg = 0.0;
+            }
         } else {
             throw new org.python.exceptions.TypeError("Floor not fully implemented yet; doesn't accept type " +
                 pyFloorArg.typeName() + ")");
