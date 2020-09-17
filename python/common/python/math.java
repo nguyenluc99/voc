@@ -3,11 +3,23 @@ import java.lang.Math;
 
 @org.python.Module(
     __doc__ =
-        "This is a math module for python"
+        "This is a math module for python.\n" +
+            "\n" +
+            "Functions:\n" +
+            "\n" +
+            "floor() -- Return the greatest integer less than or equal to a real number value input"
 )
 public class math extends org.python.types.Module {
     public math() {
+        super();
     }
+
+    @org.python.Attribute
+    public static org.python.Object __file__ = new org.python.types.Str("python/common/python/math.java");
+    @org.python.Attribute
+    public static org.python.Object __name__ = new org.python.types.Str("math");
+    @org.python.Attribute
+    public static org.python.Object __package__ = new org.python.types.Str("");
 
     @org.python.Method(
         __doc__ = "Returns a new subclass of tuple with named fields.\n" +
@@ -23,28 +35,36 @@ public class math extends org.python.types.Module {
     @org.python.Method(
         __doc__ = "floor(pyFloorArg: number) -> integer\n" +
             "\n" +
-            "Returns the greatest integer less than or equal to a real number value input\n",
+            "Return the greatest integer less than or equal to a real number value input\n",
         args = {"pyFloorArg"}
     )
-    public static org.python.Object floor(org.python.Object pyFloorArg) {
+    public static org.python.types.Int floor(org.python.Object pyFloorArg) {
         double javaFloorArg;
 
-        if (pyFloorArg instanceof org.python.types.Float) {
-            javaFloorArg = ((org.python.types.Float) pyFloorArg.__float__()).value;
+        switch(pyFloorArg.typeName()) {
+            case "float":
+                javaFloorArg = ((org.python.types.Float) pyFloorArg.__float__()).value;
 
-            if (javaFloorArg == Double.POSITIVE_INFINITY || javaFloorArg == Double.NEGATIVE_INFINITY) {
-                throw new org.python.exceptions.OverflowError("Python cannot convert float infinity to integer");
-            }
+                if (javaFloorArg == Double.POSITIVE_INFINITY || javaFloorArg == Double.NEGATIVE_INFINITY) {
+                    throw new org.python.exceptions.OverflowError("Cannot convert float infinity to integer");
+                }
 
-            if (javaFloorArg != javaFloorArg) {
-                throw new org.python.exceptions.ValueError("Python cannot convert float NaN to integer");
-            }
-        } else if (pyFloorArg instanceof org.python.types.Int) {
-            javaFloorArg = ((org.python.types.Int) pyFloorArg.__int__()).value;
-
-        } else {
-            throw new org.python.exceptions.TypeError("Floor not fully implemented yet; doesn't accept type " +
-                pyFloorArg.typeName() + ")");
+                if (javaFloorArg != javaFloorArg) {
+                    throw new org.python.exceptions.ValueError("Cannot convert float NaN to integer");
+                }
+                break;
+            case "int":
+                javaFloorArg = ((org.python.types.Int) pyFloorArg.__int__()).value;
+                break;
+            case "bool":
+                if (((org.python.types.Bool) pyFloorArg.__bool__()).value) {
+                    javaFloorArg = 1.0;
+                } else {
+                    javaFloorArg = 0.0;
+                }
+                break;
+            default:
+                throw new org.python.exceptions.TypeError("A float is required, not: " + pyFloorArg.typeName());
         }
         return org.python.types.Int.getInt((int)Math.floor(javaFloorArg));
     }
