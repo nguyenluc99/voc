@@ -14,9 +14,10 @@ public class math extends org.python.types.Module {
             "\n",
         args = {"x"}
     )
-    public static double ceil(org.python.Object x) {
+    public static org.python.Object ceil(org.python.Object x) {
         double d =((org.python.types.Float) x.__float__()).value;
-        return Math.ceil(d);//Math.ceil(d);
+        int c = (int)Math.ceil(d);
+        return  org.python.types.Int.getInt(c);     //Math.ceil(d);
         //throw new org.python.exceptions.NotImplementedError("Ceil not implemented yet.");
     }
 
