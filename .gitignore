@@ -22,3 +22,8 @@ tests/tmp*
 .DS_Store
 .idea/
 .vscode
+
+/env
+/gen
+/stdlib_tests/env/
+voc.iml
