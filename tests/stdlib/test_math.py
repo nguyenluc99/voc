@@ -7,13 +7,13 @@ class MathModuleTests(TranspileTestCase):
     """
     Testing of Python3 math module methods with TranspileTestCase:
         * math.floor
-        *
+        * math.ceil
     """
 
     #######################################################
     # math.floor
     @expectedFailure
-    def test_math_floor_None_argument(self):
+    def test_math_floor_none_argument(self):
         self.assertCodeExecution("""
             from math import floor
             test_arg = None
@@ -29,7 +29,7 @@ class MathModuleTests(TranspileTestCase):
             """)
 
     @expectedFailure
-    def test_math_floor_NaN_argument(self):
+    def test_math_floor_nan_argument(self):
         self.assertCodeExecution("""
                 from math import floor
                 test_arg = float("nan")
@@ -76,6 +76,9 @@ class MathModuleTests(TranspileTestCase):
             test_arg = False
             print(floor(test_arg))
             """)
+
+    #######################################################
+    # math.ceil
     def test_ceil(self):
         self.assertCodeExecution("""
             import math
