@@ -8,6 +8,7 @@ class MathModuleTests(TranspileTestCase):
     Testing of Python3 math module methods with TranspileTestCase:
         * math.floor
         * math.ceil
+        * math.fabs
     """
 
     #######################################################
@@ -84,12 +85,31 @@ class MathModuleTests(TranspileTestCase):
             import math
             print(math.ceil(1.3))
 
-            print(print(math.ceil(-1.2)))
+            print(math.ceil(-1.2))
 
-            print(print(math.ceil(0)))
+            print(math.ceil(0))
 
-            print(print(math.ceil(3)))
+            print(math.ceil(3))
 
             """)
 
+    #######################################################
+    # math.fabs
+    def test_fabs(self):
+        self.assertCodeExecution("""
+            from math import fabs
+            print(fabs(-2))
+            print(fabs(3))
+            print(fabs(-1.119))
+            print(fabs(1.122))
+            print(fabs(True))
+            print(fabs(False))
+            """)
+
+    @expectedFailure
+    def test_fabs_with_complex(self):
+        self.assertCodeExecution("""
+            from math import fabs
+            print(fabs(3j))
+        """)
     #######################################################

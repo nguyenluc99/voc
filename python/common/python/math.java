@@ -69,4 +69,43 @@ public class math extends org.python.types.Module {
         }
         return org.python.types.Int.getInt((int)Math.floor(javaFloorArg));
     }
+
+    @org.python.Method(
+        __doc__ = "Returns the absolute value of a floating point number\n" +
+            "\n",
+        args = {"pyFabsArg"}
+    )
+    public static org.python.types.Float fabs(org.python.Object pyFabsArg)  {
+        double javaFabsValue;
+
+        switch(pyFabsArg.typeName()) {
+            case "float":
+                javaFabsValue = ((org.python.types.Float) pyFabsArg.__float__()).value;
+                if (javaFabsValue == Double.POSITIVE_INFINITY || javaFabsValue == Double.NEGATIVE_INFINITY) {
+                    throw new org.python.exceptions.OverflowError("Cannot convert float infinity to float absolute value");
+                }
+                if (javaFabsValue < 0.0){
+                    javaFabsValue = -javaFabsValue;
+                }
+                break;
+            case "int":
+                javaFabsValue = ((org.python.types.Int) pyFabsArg.__int__()).value;
+                if (javaFabsValue < 0)
+                    javaFabsValue = javaFabsValue * -1;
+                break;
+            case "bool":
+                if (((org.python.types.Bool) pyFabsArg.__bool__()).value == Boolean.TRUE) {
+                    javaFabsValue = 1.0;
+                } else {
+                    javaFabsValue = 0.0;
+                }
+                break;
+            case "complex":
+                throw new org.python.exceptions.TypeError("can't convert complex to float");
+            default:
+                throw new org.python.exceptions.TypeError("must be real number, not " + pyFabsArg.typeName());
+        }
+        return new org.python.types.Float(javaFabsValue);
+    }
+
 }
