@@ -13,7 +13,8 @@ public enum DateTimeEnum {
     MON_VAL_ERR("month must be in 1..12"),
     DAY_VAL_ERR("day is out of range for month"),
     SYNTAX_ERR("positional argument follows keyword argument"),
-    MAX_ARG_ERR("function takes at most 3 arguments (%d given)");
+    MAX_ARG_ERR("function takes at most 3 arguments (%d given)"),
+    TYPE_ERR("integer argument expected, got ");
 
     private final String dateTimeEnum;
 
