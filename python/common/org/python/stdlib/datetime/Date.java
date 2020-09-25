@@ -3,6 +3,7 @@ package org.python.stdlib.datetime;
 import org.python.Object;
 import java.util.Collections;
 import java.util.Map;
+import java.time.LocalDate;
 
 /**
  * Java class for Python's datetime.date class
@@ -313,16 +314,14 @@ public class Date extends org.python.types.Object {
     }
 
     /**
-     * Not tested
-     * @return
+     * Creates a new Date() instance for the current local date
+     * @return current local date
      */
     @org.python.Method(__doc__ = "")
-    public static org.python.Object today() {
-        java.time.LocalDateTime today = java.time.LocalDateTime.now();
-        int y = today.getYear();
-        int m = today.getMonthValue();
-        int d = today.getDayOfMonth();
-        org.python.Object[] args = { org.python.types.Int.getInt(y), org.python.types.Int.getInt(m), org.python.types.Int.getInt(d) };
+    public static Date today() {
+        LocalDate today = LocalDate.now();
+        org.python.Object[] args = { org.python.types.Int.getInt(today.getYear()),
+            org.python.types.Int.getInt(today.getMonthValue()), org.python.types.Int.getInt(today.getDayOfMonth()) };
         return new Date(args, Collections.emptyMap());
     }
 
