@@ -4,11 +4,12 @@ import org.python.Object;
 import java.util.Collections;
 import java.util.Map;
 
+/**
+ * Java class for Python's datetime.date class
+ * Assumes syntax order of input is correct. That is, args are always before kwargs
+ * Last edited: 25/09/2020
+ */
 public class Date extends org.python.types.Object {
-    /**
-     * Java class for Python's datetime.date class
-     * Last edited: 24/09/2020
-     */
 
     private final int maxYear = 9999;
     private final int maxMonth = 12;
@@ -34,9 +35,11 @@ public class Date extends org.python.types.Object {
     public static final org.python.Object max = __max__();
 
     /**
-     * Class constructor
-     * @param args Object list containing anywhere between 0 and 3 org.python.types.Int objects.
-     * @param kwargs HashMap containing anywhere between 0 and 3 org.python.types.Int objects.
+     * Class constructor for datetime.date.
+     * Takes exactly 3 inputs, whether arg, kwarg or both.
+     * Assumes syntax order of input is correct. That is, args are always before kwargs.
+     * @param args Object list containing between 0 and 3 org.python.types.Int objects.
+     * @param kwargs HashMap containing between 0 and 3 org.python.types.Int objects.
      */
     @org.python.Method(__doc__ = "")
     public Date(org.python.Object[] args, java.util.Map<java.lang.String, org.python.Object> kwargs) {
@@ -44,19 +47,23 @@ public class Date extends org.python.types.Object {
         this.kwargs = kwargs;
         this.args = args;
 
-        switch(this.args.length + this.kwargs.size()) {
+        int totalArguments = this.args.length + this.kwargs.size();
+
+        switch(totalArguments) {
             case 3: // length of kwargs and args combined is equal to 3
-                setDate();
+                this.setDate();
                 break;
             case 2:
-                twoArguments();
+                this.twoArguments();
                 break;
             case 1:
-                oneArgument();
+                this.oneArgument();
+                break;
+            case 0:
                 break;
             default: // length of kwargs and args combined is greater than 3
                 throw new org.python.exceptions.TypeError(String.format(DateTimeEnum.MAX_ARG_ERR.toString(),
-                    this.args.length + this.kwargs.size()));
+                    totalArguments));
         }
     }
 
@@ -64,118 +71,95 @@ public class Date extends org.python.types.Object {
      * Constructs a new Date(year, month, day)
      */
     private void setDate() {
-        // Checks that positional arguments don't follow keyword arguments
-        if (this.args.length < 3 && this.kwargs.get(DateTimeEnum.DAY.toString()) == null ||
-            this.args.length < 2 && this.kwargs.get(DateTimeEnum.MONTH.toString()) == null) {
-            throw new org.python.exceptions.SyntaxError(DateTimeEnum.SYNTAX_ERR.toString());
+        this.validateArgTypes();
+
+        // Checks if there are kwargs that the key "day" exists, otherwise throws TypeError
+        if (this.kwargs.size() > 0 && !this.kwargs.containsKey(DateTimeEnum.DAY.toString())) {
+            throw new org.python.exceptions.TypeError(DateTimeEnum.DAY_MISS_ERR.toString());
         }
 
+        // Checks if more than 1 kwarg that the key "month" exists, otherwise throws TypeError
+        if (this.kwargs.size() > 1 && !this.kwargs.containsKey(DateTimeEnum.MONTH.toString())) {
+            throw new org.python.exceptions.TypeError(DateTimeEnum.MONTH.toString());
+        }
+        this.validateKwargTypes();
+
         // Set year attribute
-        if (this.kwargs.get(DateTimeEnum.YEAR.toString()) != null) {
+        if (this.kwargs.containsKey(DateTimeEnum.YEAR.toString())) {
             this.year = this.kwargs.get(DateTimeEnum.YEAR.toString());
         } else {
             this.year = this.args[0];
         }
 
         // Set month attribute
-        if (this.kwargs.get(DateTimeEnum.MONTH.toString()) != null) {
+        if (this.kwargs.containsKey(DateTimeEnum.MONTH.toString())) {
             this.month = this.kwargs.get(DateTimeEnum.MONTH.toString());
         } else {
             this.month = this.args[1];
         }
 
         // Set day attribute
-        if (this.kwargs.get(DateTimeEnum.DAY.toString()) != null) {
+        if (this.kwargs.containsKey(DateTimeEnum.DAY.toString())) {
             this.day = this.kwargs.get(DateTimeEnum.DAY.toString());
         } else {
             this.day = this.args[2];
         }
 
-        // Check each attribute value is of type: org.python.types.Int
-        if (!(this.year instanceof org.python.types.Int)) {
-            throw new org.python.exceptions.TypeError(DateTimeEnum.TYPE_ERR.toString() +
-                this.year.typeName());
-        } else if (!(this.month instanceof org.python.types.Int)) {
-            throw new org.python.exceptions.TypeError(DateTimeEnum.TYPE_ERR.toString() +
-                this.month.typeName());
-        } else if (!(this.day instanceof org.python.types.Int)) {
-            throw new org.python.exceptions.TypeError(DateTimeEnum.TYPE_ERR.toString() +
-                this.day.typeName());
-        }
-
-        // Check each attribute value is within the appropriate range
+        // Check year attribute value is within the appropriate range
         if (this.minDate > ((org.python.types.Int) this.year).value ||
             ((org.python.types.Int) this.year).value > this.maxYear) {
             throw new org.python.exceptions.ValueError(String.format(DateTimeEnum.YR_VAL_ERR.toString(),
                 ((org.python.types.Int) this.year).value));
-        } else if (this.minDate > ((org.python.types.Int) this.month).value ||
+        }
+
+        // Check month attribute value is within the appropriate range
+        if (this.minDate > ((org.python.types.Int) this.month).value ||
             ((org.python.types.Int) this.month).value > this.maxMonth) {
             throw new org.python.exceptions.ValueError(DateTimeEnum.MON_VAL_ERR.toString());
-        } else if (this.minDate > ((org.python.types.Int) this.day).value ||
+        }
+
+        // Check day attribute value is within the appropriate range
+        if (this.minDate > ((org.python.types.Int) this.day).value ||
             ((org.python.types.Int) this.day).value > this.maxDay) {
             throw new org.python.exceptions.ValueError(DateTimeEnum.DAY_VAL_ERR.toString());
         }
     }
 
     /**
-     * Class for when only two inputs is included in each of the args and kwargs parameters
-     * Not tested - same as initial code, but moved from class constructor method conditional
+     * Method for when only two inputs are included in total between the args and kwargs parameters
+     * Validates input and checks kwarg keys to return a Python TypeError with the correct message
      */
     private void twoArguments() {
+        this.validateArgTypes();
+
         if (args.length == 2) {
-            this.year = args[0];
-            this.month = args[1];
+            throw new org.python.exceptions.TypeError(DateTimeEnum.DAY_MISS_ERR.toString());
+        }
+
+        if (args.length == 1) {
+            if (this.kwargs.containsKey(DateTimeEnum.YEAR.toString()) ||
+                this.kwargs.containsKey(DateTimeEnum.DAY.toString())) {
+                throw new org.python.exceptions.TypeError(DateTimeEnum.MON_MISS_ERR.toString());
+            }
         } else {
-            if (kwargs.get("year") != null) {
-                this.year = kwargs.get("year");
+            if (this.kwargs.containsKey(DateTimeEnum.MONTH.toString()) &&
+                this.kwargs.containsKey(DateTimeEnum.DAY.toString())) {
+                throw new org.python.exceptions.TypeError(DateTimeEnum.YR_MISS_ERR.toString());
             }
 
-            if (args.length > 0) {
-                this.year = args[0];
-            }
-
-            if (kwargs.get("month") != null) {
-                this.month = kwargs.get("month");
-            }
-
-            if (kwargs.get("day") != null) {
-                this.day = kwargs.get("day");
+            if (this.kwargs.containsKey(DateTimeEnum.YEAR.toString()) &&
+                this.kwargs.containsKey(DateTimeEnum.DAY.toString())) {
+                this.kwargs.put(DateTimeEnum.DAY.toString(), org.python.types.Int.getInt(this.maxDay));
+                this.validateKwargTypes();
+                throw new org.python.exceptions.TypeError(DateTimeEnum.MON_MISS_ERR.toString());
             }
         }
-
-        String y = this.year + "";
-        String m = this.month + "";
-        String d = this.day + "";
-
-        if (!y.equals("null") && !(this.year instanceof org.python.types.Int)) {
-            throw new org.python.exceptions.TypeError("intege argument expected, got " + this.year.typeName());
-        }
-
-        if (kwargs.get("year") != null && args.length > 0) {
-            throw new org.python.exceptions.SyntaxError("positional argument follows keyword argument");
-        }
-
-        if (!(this.month instanceof org.python.types.Int) && !m.equals("null")) {
-            throw new org.python.exceptions.TypeError("integer argument expected, got " + this.month.typeName());
-        }
-
-        if (y.equals("null")) {
-
-            throw new org.python.exceptions.TypeError("function missing required argument 'year' (pos 1)");
-        }
-
-        if (m.equals("null")) {
-
-            throw new org.python.exceptions.TypeError("function missing required argument 'month' (pos 2)");
-        }
-
-        if (d.equals("null")) {
-            throw new org.python.exceptions.TypeError("function missing required argument 'day' (pos 3)");
-        }
+        this.validateKwargTypes();
+        throw new org.python.exceptions.TypeError(DateTimeEnum.DAY_MISS_ERR.toString());
     }
 
     /**
-     * Class for when only one input is included in each of the args and kwargs parameters
+     * Method for when only one input is included in each of the args and kwargs parameters
      * Not tested - same as initial code, but moved from class constructor method conditional
      */
     private void oneArgument() {
@@ -205,6 +189,45 @@ public class Date extends org.python.types.Object {
         }
         if (!m.equals("null") || !d.equals("null")) {
             throw new org.python.exceptions.TypeError("function missing required argument 'year' (pos 1)");
+        }
+    }
+
+    /**
+     * Validates arg input values are of type Integer, otherwise throws exception
+     */
+    private void validateArgTypes() {
+        for (Object arg : this.args) {
+            if (arg == null) {
+                throw new org.python.exceptions.TypeError(DateTimeEnum.NONE_TYPE_ERR.toString());
+            }
+
+            if (arg instanceof org.python.types.Str) {
+                throw new org.python.exceptions.TypeError(DateTimeEnum.STR_TYPE_ERR.toString());
+            }
+
+            if (!(arg instanceof org.python.types.Int)) {
+                throw new org.python.exceptions.TypeError(DateTimeEnum.TYPE_ERR.toString() + arg.typeName());
+            }
+        }
+    }
+
+    /**
+     * Validates kwarg input values are of type Integer, otherwise throws exception
+     */
+    private void validateKwargTypes() {
+        for (Map.Entry<String, Object> kwarg : this.kwargs.entrySet()) {
+            if (kwarg.getValue() == null) {
+                throw new org.python.exceptions.TypeError(DateTimeEnum.NONE_TYPE_ERR.toString());
+            }
+
+            if (kwarg.getValue() instanceof org.python.types.Str) {
+                throw new org.python.exceptions.TypeError(DateTimeEnum.STR_TYPE_ERR.toString());
+            }
+
+            if (!(kwarg.getValue() instanceof org.python.types.Int)) {
+                throw new org.python.exceptions.TypeError(DateTimeEnum.TYPE_ERR.toString() +
+                    kwarg.getValue().typeName());
+            }
         }
     }
 
