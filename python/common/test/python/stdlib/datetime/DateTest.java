@@ -14,6 +14,7 @@ import org.python.stdlib.datetime.DateTimeEnum;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -860,5 +861,16 @@ public class DateTest {
         this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.minDate));
         this.assertError(DateTimeEnum.TYPE_ERR.toString() + doubleToObj(0.0).typeName(),
             TypeError.class);
+    }
+
+    /**
+     * Test datetime.date.today() class method
+     */
+    @Test
+    @DisplayName("Test datetime.date.today() class method")
+    public void testDateTodayClassMethod() {
+        LocalDate curLocalDate = LocalDate.now();
+        this.newDate = Date.today();
+        assertAllDate(curLocalDate.getYear(), curLocalDate.getMonthValue(), curLocalDate.getDayOfMonth());
     }
 }
