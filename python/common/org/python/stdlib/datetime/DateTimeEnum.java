@@ -21,7 +21,9 @@ public enum DateTimeEnum {
     STR_TYPE_ERR("an integer is required (got type str)"),
     NONE_TYPE_ERR("an integer is required (got type NoneType)"),
     ERROR("error"),
-    NO_ERROR("no error");
+    NO_ERROR("no error"),
+    MIN_DATE_STR("0001-01-01"),
+    MAX_DATE_STR("9999-12-31");
 
     private final String dateTimeEnum;
 

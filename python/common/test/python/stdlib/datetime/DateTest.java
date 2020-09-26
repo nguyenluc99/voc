@@ -1033,4 +1033,32 @@ public class DateTest {
         this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
         this.assertError(DateTimeEnum.MON_VAL_ERR.toString(), ValueError.class);
     }
+
+    /**
+     * Test Date().__repr__() instance method
+     */
+    @Test
+    @DisplayName("Test Date().__repr__() instance method")
+    public void testDateReprInstanceMethod() {
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        assertEquals(this.newDate.__repr__(), this.strToObj(DateTimeEnum.MIN_DATE_STR.toString()));
+
+        this.args = new Object[]{this.intToObj(this.maxYear), this.intToObj(this.maxMonth), this.intToObj(this.maxDay)};
+        this.newDate = new Date(this.args, this.kwargs);
+        assertEquals(this.newDate.__repr__(), this.strToObj(DateTimeEnum.MAX_DATE_STR.toString()));
+
+        this.args = new Object[]{};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.newDate = new Date(this.args, this.kwargs);
+        assertEquals(this.newDate.__repr__(), this.strToObj(DateTimeEnum.MAX_DATE_STR.toString()));
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.minDate));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.minDate));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.minDate));
+        this.newDate = new Date(this.args, this.kwargs);
+        assertEquals(this.newDate.__repr__(), this.strToObj(DateTimeEnum.MIN_DATE_STR.toString()));
+    }
 }
