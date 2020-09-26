@@ -1063,7 +1063,7 @@ public class DateTest {
     }
 
     /**
-     * Test Date().weekday() instance method for dates post-mid-fifteenth century
+     * Test Date().weekday() instance method for dates post-mid-sixteenth century
      *
      * This test will fail for some dates. The python weekday() method returns incorrect values for random dates.
      * For example, 0001-01-01 returns weekday 0 (Monday), whereas the java weekday() method returns 5.
@@ -1073,8 +1073,8 @@ public class DateTest {
      * Such randomness will likely require more time than is available for this testing. The current dates are correct.
      */
     @Test
-    @DisplayName("Test Date().weekday() instance method for dates post-mid-fifteenth century")
-    public void testDateWeekDayInstanceMethodPostMidFifteenthCentury() {
+    @DisplayName("Test Date().weekday() instance method for dates post-mid-sixteenth century")
+    public void testDateWeekDayInstanceMethodPostMidSixteenthCentury() {
         // year=9999, month=12, day=31
         this.args = new Object[]{this.intToObj(this.maxYear), this.intToObj(this.maxMonth), this.intToObj(this.maxDay)};
         this.newDate = new Date(this.args, this.kwargs);
@@ -1092,7 +1092,7 @@ public class DateTest {
     }
 
     /**
-     * Test Date().weekday() instance method for dates pre-mid-fifteenth century - failing
+     * Test Date().weekday() instance method for dates pre-mid-sixteenth century - failing
      *
      * This test will fail for some dates. The python weekday() method returns incorrect values for random dates.
      * For example, 0001-01-01 returns weekday 0 (Monday), whereas the java weekday() method returns 5.
@@ -1102,9 +1102,9 @@ public class DateTest {
      * Such randomness will likely require more time than is available for this testing. The current dates are correct.
      */
     @Test
-    @DisplayName("Test Date().weekday() instance method for dates pre-mid-fifteenth century")
+    @DisplayName("Test Date().weekday() instance method for dates pre-mid-sixteenth century")
     @Disabled
-    public void testDateWeekDayInstanceMethodPreMidFifteenthCentury() {
+    public void testDateWeekDayInstanceMethodPreMidSixteenthCentury() {
         // year=1415, month=10, day=25 - fails
         this.args = new Object[]{this.intToObj(1415), this.intToObj(10), this.intToObj(25)};
         this.newDate = new Date(this.args, this.kwargs);
@@ -1114,5 +1114,64 @@ public class DateTest {
         this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
         this.newDate = new Date(this.args, this.kwargs);
         assertEquals(this.intToObj(0), this.newDate.weekday());
+    }
+
+    /**
+     * Test Date.max class attribute
+     */
+    @Test
+    @DisplayName("Test Date.max class attribute")
+    public void testDateMaxClassAttribute() {
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+        this.newDate = Date.max;
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+    }
+
+    /**
+     * Test Date.min class attribute
+     */
+    @Test
+    @DisplayName("Test Date.min class attribute")
+    public void testDateMinClassAttribute() {
+        this.args = new Object[]{this.intToObj(this.maxYear), this.intToObj(this.maxMonth), this.intToObj(this.maxDay)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+        this.newDate = Date.min;
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+    }
+
+    /**
+     * Test Date.year instance attribute
+     */
+    @Test
+    @DisplayName("Test Date.year instance attribute")
+    public void testDateYearInstanceAttribute() {
+        this.args = new Object[]{this.intToObj(this.maxYear), this.intToObj(this.maxMonth), this.intToObj(this.maxDay)};
+        this.newDate = new Date(this.args, this.kwargs);
+        assertEquals(intToObj(this.maxYear), this.newDate.year);
+    }
+
+    /**
+     * Test Date.month instance attribute
+     */
+    @Test
+    @DisplayName("Test Date.month instance attribute")
+    public void testDateMonthInstanceAttribute() {
+        this.args = new Object[]{this.intToObj(this.maxYear), this.intToObj(this.maxMonth), this.intToObj(this.maxDay)};
+        this.newDate = new Date(this.args, this.kwargs);
+        assertEquals(intToObj(this.maxMonth), this.newDate.month);
+    }
+
+    /**
+     * Test Date.day instance attribute
+     */
+    @Test
+    @DisplayName("Test Date.day instance attribute")
+    public void testDateDayInstanceAttribute() {
+        this.args = new Object[]{this.intToObj(this.maxYear), this.intToObj(this.maxMonth), this.intToObj(this.maxDay)};
+        this.newDate = new Date(this.args, this.kwargs);
+        assertEquals(intToObj(this.maxDay), this.newDate.day);
     }
 }
