@@ -249,23 +249,24 @@ public class Date extends org.python.types.Object {
     }
 
     /**
-     * Not tested
-     * @return
+     * Method for returning the Date object representation
+     * @return string representation of Date object: YYYY-MM-DD
      */
     @org.python.Method(__doc__ = "")
     public org.python.types.Str __repr__() {
-        String year = this.year + "";
+        String year = ((org.python.types.Str) this.year.__str__()).value;
+
         while (year.length() < 4)
-            year = "0" + year;
+            year = "0".concat(year);
+        String month = ((org.python.types.Str) this.month.__str__()).value;
 
-        String month = this.month + "";
-        while (month.length() < 2)
-            month = "0" + month;
+        if (month.length() < 2)
+            month = "0".concat(month);
+        String day = ((org.python.types.Str) this.day.__str__()).value;
 
-        String day = this.day + "";
-        while (day.length() < 2)
-            day = "0" + day;
-        return new org.python.types.Str(year + "-" + month + "-" + day);
+        if (day.length() < 2)
+            day = "0".concat(day);
+        return new org.python.types.Str(String.format("%s-%s-%s", year, month, day));
     }
 
     /**
