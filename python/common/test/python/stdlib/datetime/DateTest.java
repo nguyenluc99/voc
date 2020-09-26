@@ -11,11 +11,9 @@ import org.python.exceptions.ValueError;
 import org.python.exceptions.TypeError;
 import org.python.stdlib.datetime.Date;
 import org.python.stdlib.datetime.DateTimeEnum;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.time.LocalDate;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -44,7 +42,6 @@ public class DateTest {
 
     /**
      * Convert primitive int to org.python.types.Int type
-     *
      * @param arg primitive int type argument
      * @return int converted to org.python.types.Int type
      */
@@ -54,7 +51,6 @@ public class DateTest {
 
     /**
      * Convert primitive double to org.python.types.Float type
-     *
      * @param arg primitive double type argument
      * @return double converted to org.python.types.Float type
      */
@@ -64,7 +60,6 @@ public class DateTest {
 
     /**
      * Convert String to org.python.types.Str type
-     *
      * @param arg String type argument
      * @return String converted to org.python.types.Str type
      */
@@ -74,7 +69,6 @@ public class DateTest {
 
     /**
      * Convert boolean to org.python.types.Bool type
-     *
      * @param arg boolean type argument
      * @return boolean converted to org.python.types.Bool type
      */
@@ -84,7 +78,6 @@ public class DateTest {
 
     /**
      * Groups assertions so that all are executed and all failures are reported
-     *
      * @param year  expected value for Date.year argument being asserted
      * @param month expected value for Date.year argument being asserted
      * @param day   expected value for Date.year argument being asserted
@@ -98,7 +91,6 @@ public class DateTest {
 
     /**
      * Asserts exception errors are returned and are of the correct type with correct message
-     *
      * @param expectedMsg     expected message for the expected exception error
      * @param expectedErrType expected type for the expected exception error
      */
@@ -232,6 +224,40 @@ public class DateTest {
         this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
         this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
         this.assertError(DateTimeEnum.SYNTAX_ERR.toString(), SyntaxError.class);
+    }
+
+    /**
+     * Test Date() creation with inputs: 12, year=9999, day=31
+     */
+    @Test
+    @DisplayName("Test Date() creation with inputs: 12, year=9999, day=31")
+    public void testDateCreationWithYearAndDayKwargsAfterArg() {
+        this.args = new Object[]{this.intToObj(this.maxMonth)};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.assertError(DateTimeEnum.MON_MISS_ERR.toString(), TypeError.class);
+    }
+
+    /**
+     * Test Date() creation with inputs: 12, 31, year=9999
+     */
+    @Test
+    @DisplayName("Test Date() creation with inputs: 12, 31, year=9999")
+    public void testDateCreationWithYearKwargAfterTwoArgs() {
+        this.args = new Object[]{this.intToObj(this.maxMonth), this.intToObj(this.maxDay)};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxDay));
+        this.assertError(DateTimeEnum.DAY_MISS_ERR.toString(), TypeError.class);
+    }
+
+    /**
+     * Test Date() creation with inputs: 9999, 31, month=12
+     */
+    @Test
+    @DisplayName("Test Date() creation with inputs: 9999, 31, month=12")
+    public void testDateCreationWithMonthKwargAfterTwoArgs() {
+        this.args = new Object[]{this.intToObj(this.maxYear), this.intToObj(this.maxDay)};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
+        this.assertError(DateTimeEnum.DAY_MISS_ERR.toString(), TypeError.class);
     }
 
     /**
@@ -1130,30 +1156,106 @@ public class DateTest {
     @Test
     @DisplayName("Test Date() with one argument")
     public void testDateWithOneArguments() {
-        this.kwargs.clear();
+        // Test: Date(1)
+        this.args = new Object[]{this.intToObj(this.minDate)};
+        this.assertError(DateTimeEnum.MON_MISS_ERR.toString(), TypeError.class);
 
-        this.args = new Object[]{this.intToObj(2)};
-        this.assertError("function missing required argument 'month' (pos 2)", TypeError.class);
-        this.kwargs.clear();
+        // Test: Date(1.2)
+        this.args = new Object[]{this.doubleToObj(1.2)};
+        this.assertError(DateTimeEnum.TYPE_ERR.toString() + doubleToObj(1.2).typeName(),
+            TypeError.class);
 
+        // Test: Date(null)
+        this.args = new Object[]{null};
+        this.assertError(DateTimeEnum.NONE_TYPE_ERR.toString(), TypeError.class);
+
+        // Test: Date(true)
+        this.args = new Object[]{boolToObj(true)};
+        this.assertError(DateTimeEnum.MON_MISS_ERR.toString(), TypeError.class);
+
+        // Test: Date(false)
+        this.args = new Object[]{boolToObj(false)};
+        this.assertError(DateTimeEnum.MON_MISS_ERR.toString(), TypeError.class);
+
+        // Test: Date("str")
+        this.args = new Object[]{strToObj("str")};
+        this.assertError(DateTimeEnum.STR_TYPE_ERR.toString(), TypeError.class);
+
+        // Test: Date(year=1)
         this.args = new Object[]{};
-        this.kwargs.put("year", this.intToObj(2));
-        this.assertError("function missing required argument 'month' (pos 2)", TypeError.class);
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.minDate));
+        this.assertError(DateTimeEnum.MON_MISS_ERR.toString(), TypeError.class);
+
+        // Test: Date(year=1.2)
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.doubleToObj(1.2));
+        this.assertError(DateTimeEnum.TYPE_ERR.toString() + doubleToObj(1.2).typeName(),
+            TypeError.class);
+
+        // Test: Date(year="str")
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.strToObj("str"));
+        this.assertError(DateTimeEnum.STR_TYPE_ERR.toString(), TypeError.class);
+
+        // Test: Date(year=null)
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), null);
+        this.assertError(DateTimeEnum.NONE_TYPE_ERR.toString(), TypeError.class);
+
+        // Test: Date(year=true)
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.boolToObj(true));
+        this.assertError(DateTimeEnum.MON_MISS_ERR.toString(), TypeError.class);
+
+        // Test: Date(year=false)
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.boolToObj(false));
+        this.assertError(DateTimeEnum.MON_MISS_ERR.toString(), TypeError.class);
         this.kwargs.clear();
 
-        this.args = new Object[]{};
-        this.kwargs.put("month", this.intToObj(2));
-        this.assertError("function missing required argument 'year' (pos 1)", TypeError.class);
+        // Test: Date(month=1)
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.minDate));
+        this.assertError(DateTimeEnum.YR_MISS_ERR.toString(), TypeError.class);
+
+        // Test: Date(month=1.2)
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.doubleToObj(1.2));
+        this.assertError(DateTimeEnum.YR_MISS_ERR.toString(), TypeError.class);
+
+        // Test: Date(month="str")
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.strToObj("str"));
+        this.assertError(DateTimeEnum.YR_MISS_ERR.toString(), TypeError.class);
+
+        // Test: Date(month=null)
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), null);
+        this.assertError(DateTimeEnum.YR_MISS_ERR.toString(), TypeError.class);
+
+        // Test: Date(month=true)
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.boolToObj(true));
+        this.assertError(DateTimeEnum.YR_MISS_ERR.toString(), TypeError.class);
+
+        // Test: Date(month=false)
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.boolToObj(false));
+        this.assertError(DateTimeEnum.YR_MISS_ERR.toString(), TypeError.class);
         this.kwargs.clear();
 
-        this.args = new Object[]{};
-        this.kwargs.put("day", this.intToObj(2));
-        this.assertError("function missing required argument 'year' (pos 1)", TypeError.class);
-        this.kwargs.clear();
+        // Test: Date(day=1)
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.minDate));
+        this.assertError(DateTimeEnum.YR_MISS_ERR.toString(), TypeError.class);
 
-        this.args = new Object[]{};
-        this.kwargs.put("year", this.doubleToObj(1.2));
-        this.assertError("integer argument expected, got float", TypeError.class);
+        // Test: Date(day=1.2)
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.doubleToObj(1.2));
+        this.assertError(DateTimeEnum.YR_MISS_ERR.toString(), TypeError.class);
+
+        // Test: Date(day="str")
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.strToObj("str"));
+        this.assertError(DateTimeEnum.YR_MISS_ERR.toString(), TypeError.class);
+
+        // Test: Date(day=null)
+        this.kwargs.put(DateTimeEnum.DAY.toString(), null);
+        this.assertError(DateTimeEnum.YR_MISS_ERR.toString(), TypeError.class);
+
+        // Test: Date(day=true)
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.boolToObj(true));
+        this.assertError(DateTimeEnum.YR_MISS_ERR.toString(), TypeError.class);
+
+        // Test: Date(day=false)
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.boolToObj(false));
+        this.assertError(DateTimeEnum.YR_MISS_ERR.toString(), TypeError.class);
     }
 
     /**
@@ -1162,9 +1264,8 @@ public class DateTest {
     @Test
     @DisplayName("Test Date() with zero arguments")
     public void testDateWithZeroArguments() {
-        this.kwargs.clear();
         this.args = new Object[]{};
-        this.assertError("function missing required argument 'year' (pos 1)", TypeError.class);
+        this.assertError(DateTimeEnum.YR_MISS_ERR.toString(), TypeError.class);
     }
   
     /**
