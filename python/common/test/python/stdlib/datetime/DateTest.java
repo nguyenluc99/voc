@@ -68,6 +68,15 @@ public class DateTest {
     }
 
     /**
+     * Convert boolean to org.python.types.Bool type
+     * @param arg boolean type argument
+     * @return boolean converted to org.python.types.Bool type
+     */
+    private org.python.types.Bool boolToObj(boolean arg) {
+        return org.python.types.Bool.getBool(arg);
+    }
+
+    /**
      * Groups assertions so that all are executed and all failures are reported
      * @param year expected value for Date.year argument being asserted
      * @param month expected value for Date.year argument being asserted
@@ -445,6 +454,19 @@ public class DateTest {
         this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate)};
         this.assertError(DateTimeEnum.DAY_MISS_ERR.toString(), TypeError.class);
 
+        // with bool values (which are accepted in Python datetime.date)
+        this.args = new Object[]{this.boolToObj(true), this.intToObj(this.maxMonth)};
+        this.assertError(DateTimeEnum.DAY_MISS_ERR.toString(), TypeError.class);
+
+        this.args = new Object[]{this.boolToObj(false), this.intToObj(this.maxMonth)};
+        this.assertError(DateTimeEnum.DAY_MISS_ERR.toString(), TypeError.class);
+
+        this.args = new Object[]{this.intToObj(this.maxYear), this.boolToObj(true)};
+        this.assertError(DateTimeEnum.DAY_MISS_ERR.toString(), TypeError.class);
+
+        this.args = new Object[]{this.intToObj(this.maxYear), this.boolToObj(false)};
+        this.assertError(DateTimeEnum.DAY_MISS_ERR.toString(), TypeError.class);
+
         // with wrong value types
         this.args = new Object[]{null, this.intToObj(this.minDate)};
         this.assertError(DateTimeEnum.NONE_TYPE_ERR.toString(), TypeError.class);
@@ -488,6 +510,23 @@ public class DateTest {
         this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
         this.assertError(DateTimeEnum.DAY_MISS_ERR.toString(), TypeError.class);
 
+        // with bool values (which are accepted in Python datetime.date)
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.boolToObj(true));
+        this.assertError(DateTimeEnum.DAY_MISS_ERR.toString(), TypeError.class);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.boolToObj(true));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
+        this.assertError(DateTimeEnum.DAY_MISS_ERR.toString(), TypeError.class);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.boolToObj(false));
+        this.assertError(DateTimeEnum.DAY_MISS_ERR.toString(), TypeError.class);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.boolToObj(false));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
+        this.assertError(DateTimeEnum.DAY_MISS_ERR.toString(), TypeError.class);
+
         // with wrong value types
         this.kwargs.put(DateTimeEnum.YEAR.toString(), null);
         this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
@@ -527,6 +566,23 @@ public class DateTest {
         this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.minDate));
         this.assertError(DateTimeEnum.YR_MISS_ERR.toString(), TypeError.class);
 
+        // with bool values (which are accepted in Python datetime.date)
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.boolToObj(true));
+        this.assertError(DateTimeEnum.YR_MISS_ERR.toString(), TypeError.class);
+
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.boolToObj(true));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.assertError(DateTimeEnum.YR_MISS_ERR.toString(), TypeError.class);
+
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.boolToObj(false));
+        this.assertError(DateTimeEnum.YR_MISS_ERR.toString(), TypeError.class);
+
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.boolToObj(false));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.assertError(DateTimeEnum.YR_MISS_ERR.toString(), TypeError.class);
+
         // with wrong value types
         this.kwargs.put(DateTimeEnum.MONTH.toString(), null);
         this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.minDate));
@@ -564,6 +620,23 @@ public class DateTest {
         this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.minDate));
         this.assertError(DateTimeEnum.MON_MISS_ERR.toString(), TypeError.class);
 
+        // with bool values (which are accepted in Python datetime.date)
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.boolToObj(true));
+        this.assertError(DateTimeEnum.MON_MISS_ERR.toString(), TypeError.class);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.boolToObj(true));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.assertError(DateTimeEnum.MON_MISS_ERR.toString(), TypeError.class);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.boolToObj(false));
+        this.assertError(DateTimeEnum.MON_MISS_ERR.toString(), TypeError.class);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.boolToObj(false));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.assertError(DateTimeEnum.MON_MISS_ERR.toString(), TypeError.class);
+
         // with wrong value types
         this.kwargs.put(DateTimeEnum.YEAR.toString(), null);
         this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
@@ -599,6 +672,23 @@ public class DateTest {
     public void testDateCreationWithTwoInputsOneArgAndKwargYear() {
         this.args = new Object[]{this.intToObj(this.minDate)};
         this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.assertError(DateTimeEnum.MON_MISS_ERR.toString(), TypeError.class);
+
+        // with bool values (which are accepted in Python datetime.date)
+        this.args = new Object[]{this.boolToObj(true)};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.assertError(DateTimeEnum.MON_MISS_ERR.toString(), TypeError.class);
+
+        this.args = new Object[]{this.boolToObj(false)};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.assertError(DateTimeEnum.MON_MISS_ERR.toString(), TypeError.class);
+
+        this.args = new Object[]{this.intToObj(this.maxMonth)};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.boolToObj(true));
+        this.assertError(DateTimeEnum.MON_MISS_ERR.toString(), TypeError.class);
+
+        this.args = new Object[]{this.intToObj(this.maxMonth)};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.boolToObj(false));
         this.assertError(DateTimeEnum.MON_MISS_ERR.toString(), TypeError.class);
 
         // with wrong value types
@@ -651,6 +741,23 @@ public class DateTest {
         this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
         this.assertError(DateTimeEnum.DAY_MISS_ERR.toString(), TypeError.class);
 
+        // with bool values (which are accepted in Python datetime.date)
+        this.args = new Object[]{this.boolToObj(true)};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
+        this.assertError(DateTimeEnum.DAY_MISS_ERR.toString(), TypeError.class);
+
+        this.args = new Object[]{this.boolToObj(false)};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
+        this.assertError(DateTimeEnum.DAY_MISS_ERR.toString(), TypeError.class);
+
+        this.args = new Object[]{this.intToObj(this.maxYear)};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.boolToObj(true));
+        this.assertError(DateTimeEnum.DAY_MISS_ERR.toString(), TypeError.class);
+
+        this.args = new Object[]{this.intToObj(this.maxYear)};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.boolToObj(false));
+        this.assertError(DateTimeEnum.DAY_MISS_ERR.toString(), TypeError.class);
+
         // with wrong value types
         this.kwargs.put(DateTimeEnum.MONTH.toString(), null);
         this.assertError(DateTimeEnum.NONE_TYPE_ERR.toString(), TypeError.class);
@@ -671,6 +778,23 @@ public class DateTest {
     public void testDateCreationWithTwoInputsOneArgAndKwargDay() {
         this.args = new Object[]{this.intToObj(this.minDate)};
         this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.assertError(DateTimeEnum.MON_MISS_ERR.toString(), TypeError.class);
+
+        // with bool values (which are accepted in Python datetime.date)
+        this.args = new Object[]{this.boolToObj(true)};
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.assertError(DateTimeEnum.MON_MISS_ERR.toString(), TypeError.class);
+
+        this.args = new Object[]{this.boolToObj(false)};
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.assertError(DateTimeEnum.MON_MISS_ERR.toString(), TypeError.class);
+
+        this.args = new Object[]{this.intToObj(this.maxYear)};
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.boolToObj(true));
+        this.assertError(DateTimeEnum.MON_MISS_ERR.toString(), TypeError.class);
+
+        this.args = new Object[]{this.intToObj(this.maxYear)};
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.boolToObj(false));
         this.assertError(DateTimeEnum.MON_MISS_ERR.toString(), TypeError.class);
 
         // with wrong value types
@@ -871,6 +995,42 @@ public class DateTest {
     public void testDateTodayClassMethod() {
         LocalDate curLocalDate = LocalDate.now();
         this.newDate = Date.today();
-        assertAllDate(curLocalDate.getYear(), curLocalDate.getMonthValue(), curLocalDate.getDayOfMonth());
+        this.assertAllDate(curLocalDate.getYear(), curLocalDate.getMonthValue(), curLocalDate.getDayOfMonth());
+    }
+
+    /**
+     * Test Date() creation with 3 arg and kwarg inputs including boolean type: true
+     */
+    @Test
+    @DisplayName("Test Date() creation with 3 arg and kwarg inputs including boolean type: true")
+    public void testDateCreationWithThreeArgsAndKwargsIncludingBooleanTypeTrue() {
+        this.args = new Object[]{this.boolToObj(true)};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(1, this.maxMonth, this.maxDay);
+
+        this.args = new Object[]{this.intToObj(this.maxYear)};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.boolToObj(true));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.maxYear, 1, this.maxDay);
+    }
+
+    /**
+     * Test Date() creation with 3 arg and kwarg inputs including boolean type: false - expect ValueError
+     */
+    @Test
+    @DisplayName("Test Date() creation with 3 arg and kwarg inputs including boolean type: false - expect ValueError")
+    public void testDateCreationWithThreeArgsAndKwargsIncludingBooleanTypeFalse() {
+        this.args = new Object[]{this.boolToObj(false)};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.assertError(String.format(DateTimeEnum.YR_VAL_ERR.toString(), 0), ValueError.class);
+
+        this.args = new Object[]{this.intToObj(this.maxYear)};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.boolToObj(false));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.assertError(DateTimeEnum.MON_VAL_ERR.toString(), ValueError.class);
     }
 }
