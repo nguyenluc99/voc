@@ -81,7 +81,7 @@ public class Date extends org.python.types.Object {
 
         // Checks if more than 1 kwarg that the key "month" exists, otherwise throws TypeError
         if (this.kwargs.size() > 1 && !this.kwargs.containsKey(DateTimeEnum.MONTH.toString())) {
-            throw new org.python.exceptions.TypeError(DateTimeEnum.MONTH.toString());
+            throw new org.python.exceptions.TypeError(DateTimeEnum.MON_MISS_ERR.toString());
         }
         this.validateKwargTypes();
 
@@ -175,36 +175,17 @@ public class Date extends org.python.types.Object {
     }
 
     /**
-     * Method for when only one input is included in each of the args and kwargs parameters
+     * Method for when only one input is included in total between each of the args and kwargs parameters
+     * Validates input and checks kwarg keys to return a Python TypeError with the correct message
      */
     private void oneArgument() {
-        if (kwargs.get("year") != null) {
-            this.year = kwargs.get("year");
-        } else if (args.length > 0) {
-            this.year = args[0];
-        }
+        this.validateArgTypes();
 
-        if (kwargs.get("month") != null) {
-            this.month = kwargs.get("month");
+        if (kwargs.containsKey(DateTimeEnum.DAY.toString()) || kwargs.containsKey(DateTimeEnum.MONTH.toString())) {
+            throw new org.python.exceptions.TypeError(DateTimeEnum.YR_MISS_ERR.toString());
         }
-
-        if (kwargs.get("day") != null) {
-            this.day = kwargs.get("day");
-        }
-
-        String y = this.year + "";
-        String m = this.month + "";
-        String d = this.day + "";
-
-        if (!(this.year instanceof org.python.types.Int) && !y.equals("null")) {
-            throw new org.python.exceptions.TypeError("integer argument expected, got " + this.year.typeName());
-        }
-        if (!y.equals("null")) {
-            throw new org.python.exceptions.TypeError("function missing required argument 'month' (pos 2)");
-        }
-        if (!m.equals("null") || !d.equals("null")) {
-            throw new org.python.exceptions.TypeError("function missing required argument 'year' (pos 1)");
-        }
+        this.validateKwargTypes();
+        throw new org.python.exceptions.TypeError(DateTimeEnum.MON_MISS_ERR.toString());
     }
 
     /**
