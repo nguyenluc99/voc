@@ -1,6 +1,19 @@
 package org.python.stdlib.datetime;
 
 import java.util.Collections;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.BeforeEach;
+import org.python.Object;
+import org.python.exceptions.Exception;
+import org.python.exceptions.SyntaxError;
+import org.python.exceptions.ValueError;
+import org.python.exceptions.TypeError;
+import java.util.HashMap;
+import java.util.Map;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Date extends org.python.types.Object {
 
@@ -54,7 +67,7 @@ public class Date extends org.python.types.Object {
 	    }
 
 	    if ((this.year instanceof org.python.types.Int) && (this.month instanceof org.python.types.Int) && (this.day instanceof org.python.types.Int)) {
-		if (1 <= ((org.python.types.Int) this.year).value && ((org.python.types.Int) this.year).value <= 999) {
+		if (1 <= ((org.python.types.Int) this.year).value && ((org.python.types.Int) this.year).value <= 9999) {
 
 		    if (1d <= ((org.python.types.Int) this.month).value && ((org.python.types.Int) this.month).value <= 12d) {
 			if (1d <= ((org.python.types.Int) this.day).value && ((org.python.types.Int) this.day).value <= 31d) {
@@ -247,7 +260,7 @@ public class Date extends org.python.types.Object {
 	double weekdayNum = ((org.python.types.Int) weekday()).value;
 	String weekdayStr = weekdayList[(int) weekdayNum];
 
-	return new org.python.types.Str(weekdayStr + " " + monthStr + "  " + this.day + " 00:00:00 " + this.year);
+	return new org.python.types.Str(weekdayStr + " " + monthStr + " " + this.day + " 00:00:00 " + this.year);
     }
 
     @org.python.Method(__doc__ = "")
@@ -263,5 +276,5 @@ public class Date extends org.python.types.Object {
 	int[] convertToPython = { 6, 0, 1, 2, 3, 4, 5 };
 	return org.python.types.Int.getInt(convertToPython[day - 1]);
 
-    }
+	}
 }
