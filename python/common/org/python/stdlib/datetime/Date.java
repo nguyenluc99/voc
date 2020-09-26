@@ -197,17 +197,25 @@ public class Date extends org.python.types.Object {
      * Validates arg input values are of type Integer, otherwise throws exception
      */
     private void validateArgTypes() {
-        for (Object arg : this.args) {
-            if (arg == null) {
+        for (int i = 0; i < args.length; i++) {
+            if (args[i] == null) {
                 throw new org.python.exceptions.TypeError(DateTimeEnum.NONE_TYPE_ERR.toString());
             }
 
-            if (arg instanceof org.python.types.Str) {
+            if (args[i] instanceof org.python.types.Str) {
                 throw new org.python.exceptions.TypeError(DateTimeEnum.STR_TYPE_ERR.toString());
             }
 
-            if (!(arg instanceof org.python.types.Int)) {
-                throw new org.python.exceptions.TypeError(DateTimeEnum.TYPE_ERR.toString() + arg.typeName());
+            if (args[i] instanceof org.python.types.Bool) {
+                if (((org.python.types.Bool) args[i].__bool__()).value) {
+                    args[i] = org.python.types.Int.getInt(1);
+                } else {
+                    args[i] = org.python.types.Int.getInt(0);
+                }
+            }
+
+            if (!(args[i] instanceof org.python.types.Int)) {
+                throw new org.python.exceptions.TypeError(DateTimeEnum.TYPE_ERR.toString() + args[i].typeName());
             }
         }
     }
@@ -223,6 +231,14 @@ public class Date extends org.python.types.Object {
 
             if (kwarg.getValue() instanceof org.python.types.Str) {
                 throw new org.python.exceptions.TypeError(DateTimeEnum.STR_TYPE_ERR.toString());
+            }
+
+            if (kwarg.getValue() instanceof org.python.types.Bool) {
+                if (((org.python.types.Bool) kwarg.getValue().__bool__()).value) {
+                    kwarg.setValue(org.python.types.Int.getInt(1));
+                } else {
+                    kwarg.setValue(org.python.types.Int.getInt(0));
+                }
             }
 
             if (!(kwarg.getValue() instanceof org.python.types.Int)) {
