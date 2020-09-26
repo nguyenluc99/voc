@@ -33,4 +33,18 @@ public class DateTimeTests {
         assertEquals(new Str(dtf.format(now)),new Str(java_date_reduced) );
     }
 
+    @Test
+    public void test_date() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime now = LocalDateTime.now(); 
+
+
+        DateTime python_date_full = (DateTime) DateTime.today();
+        org.python.Object python_date_yymmdd = python_date_full.date();
+        String java_date_full = (String) python_date_yymmdd.__str__().toJava();
+        assertEquals(new Str(dtf.format(now)), new Str(java_date_full));
+    }
+
+
+    
 }
