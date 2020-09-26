@@ -15,12 +15,14 @@ import org.python.stdlib.datetime.DateTimeEnum;
 import java.util.HashMap;
 import java.util.Map;
 import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test org.python.stdlib.datetime.Date class
+ *
  * @author Adam Ross,
  * Last edited: 26/09/2020
  */
@@ -42,6 +44,7 @@ public class DateTest {
 
     /**
      * Convert primitive int to org.python.types.Int type
+     *
      * @param arg primitive int type argument
      * @return int converted to org.python.types.Int type
      */
@@ -51,6 +54,7 @@ public class DateTest {
 
     /**
      * Convert primitive double to org.python.types.Float type
+     *
      * @param arg primitive double type argument
      * @return double converted to org.python.types.Float type
      */
@@ -60,6 +64,7 @@ public class DateTest {
 
     /**
      * Convert String to org.python.types.Str type
+     *
      * @param arg String type argument
      * @return String converted to org.python.types.Str type
      */
@@ -69,6 +74,7 @@ public class DateTest {
 
     /**
      * Convert boolean to org.python.types.Bool type
+     *
      * @param arg boolean type argument
      * @return boolean converted to org.python.types.Bool type
      */
@@ -78,9 +84,10 @@ public class DateTest {
 
     /**
      * Groups assertions so that all are executed and all failures are reported
-     * @param year expected value for Date.year argument being asserted
+     *
+     * @param year  expected value for Date.year argument being asserted
      * @param month expected value for Date.year argument being asserted
-     * @param day expected value for Date.year argument being asserted
+     * @param day   expected value for Date.year argument being asserted
      */
     private void assertAllDate(int year, int month, int day) {
         assertAll(
@@ -91,7 +98,8 @@ public class DateTest {
 
     /**
      * Asserts exception errors are returned and are of the correct type with correct message
-     * @param expectedMsg expected message for the expected exception error
+     *
+     * @param expectedMsg     expected message for the expected exception error
      * @param expectedErrType expected type for the expected exception error
      */
     private void assertError(String expectedMsg, Class<? extends Throwable> expectedErrType) {
@@ -1064,7 +1072,7 @@ public class DateTest {
 
     /**
      * Test Date().weekday() instance method for dates post-mid-fifteenth century
-     *
+     * <p>
      * This test will fail for some dates. The python weekday() method returns incorrect values for random dates.
      * For example, 0001-01-01 returns weekday 0 (Monday), whereas the java weekday() method returns 5.
      * A google search returns the correct day as Saturday, which is 5, not 0, so the java weekday() method is correct.
@@ -1093,7 +1101,7 @@ public class DateTest {
 
     /**
      * Test Date().weekday() instance method for dates pre-mid-fifteenth century - failing
-     *
+     * <p>
      * This test will fail for some dates. The python weekday() method returns incorrect values for random dates.
      * For example, 0001-01-01 returns weekday 0 (Monday), whereas the java weekday() method returns 5.
      * A google search returns the correct day as Saturday, which is 5, not 0, so the java weekday() method is correct.
@@ -1114,5 +1122,48 @@ public class DateTest {
         this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
         this.newDate = new Date(this.args, this.kwargs);
         assertEquals(this.intToObj(0), this.newDate.weekday());
+    }
+
+    /**
+     * Test Date() with one arguments
+     */
+    @Test
+    @DisplayName("Test Date() with one argument")
+    public void testDateWithOneArguments() {
+        this.kwargs.clear();
+
+        this.args = new Object[]{this.intToObj(2)};
+        this.assertError("function missing required argument 'month' (pos 2)", TypeError.class);
+        this.kwargs.clear();
+
+        this.args = new Object[]{};
+        this.kwargs.put("year", this.intToObj(2));
+        this.assertError("function missing required argument 'month' (pos 2)", TypeError.class);
+        this.kwargs.clear();
+
+        this.args = new Object[]{};
+        this.kwargs.put("month", this.intToObj(2));
+        this.assertError("function missing required argument 'year' (pos 1)", TypeError.class);
+        this.kwargs.clear();
+
+        this.args = new Object[]{};
+        this.kwargs.put("day", this.intToObj(2));
+        this.assertError("function missing required argument 'year' (pos 1)", TypeError.class);
+        this.kwargs.clear();
+
+        this.args = new Object[]{};
+        this.kwargs.put("year", this.doubleToObj(1.2));
+        this.assertError("integer argument expected, got float", TypeError.class);
+    }
+
+    /**
+        * Test Date() with zero arguments
+     */
+    @Test
+    @DisplayName("Test Date() with zero arguments")
+    public void testDateWithZeroArguments() {
+        this.kwargs.clear();
+        this.args = new Object[]{};
+        this.assertError("function missing required argument 'year' (pos 1)", TypeError.class);
     }
 }

@@ -61,7 +61,7 @@ public class Date extends org.python.types.Object {
                 this.oneArgument();
                 break;
             case 0:
-                break;
+                throw new org.python.exceptions.TypeError("function missing required argument 'year' (pos 1)");
             default: // length of kwargs and args combined is greater than 3
                 throw new org.python.exceptions.TypeError(String.format(DateTimeEnum.MAX_ARG_ERR.toString(),
                     totalArguments));
