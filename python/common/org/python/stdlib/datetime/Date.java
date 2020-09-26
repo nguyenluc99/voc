@@ -61,7 +61,7 @@ public class Date extends org.python.types.Object {
                 this.oneArgument();
                 break;
             case 0:
-                throw new org.python.exceptions.TypeError("function missing required argument 'year' (pos 1)");
+                throw new org.python.exceptions.TypeError(DateTimeEnum.YR_MISS_ERR.toString());
             default: // length of kwargs and args combined is greater than 3
                 throw new org.python.exceptions.TypeError(String.format(DateTimeEnum.MAX_ARG_ERR.toString(),
                     totalArguments));
@@ -118,10 +118,25 @@ public class Date extends org.python.types.Object {
             ((org.python.types.Int) this.month).value > this.maxMonth) {
             throw new org.python.exceptions.ValueError(DateTimeEnum.MON_VAL_ERR.toString());
         }
+        int maxDayRange;
+
+        // Get the maximum day range for the given month and year
+        if (((org.python.types.Int) this.month).value == 2) {
+            if (((org.python.types.Int) this.year).value % 4 == 0) {
+                maxDayRange = 29;
+            } else {
+                maxDayRange = 28;
+            }
+        } else if (((org.python.types.Int) this.month).value == 4 || ((org.python.types.Int) this.month).value == 6 ||
+            ((org.python.types.Int) this.month).value == 9 || ((org.python.types.Int) this.month).value == 11) {
+            maxDayRange = 30;
+        } else {
+            maxDayRange = this.maxDay;
+        }
 
         // Check day attribute value is within the appropriate range
         if (this.minDate > ((org.python.types.Int) this.day).value ||
-            ((org.python.types.Int) this.day).value > this.maxDay) {
+            ((org.python.types.Int) this.day).value > maxDayRange) {
             throw new org.python.exceptions.ValueError(DateTimeEnum.DAY_VAL_ERR.toString());
         }
     }
@@ -161,7 +176,6 @@ public class Date extends org.python.types.Object {
 
     /**
      * Method for when only one input is included in each of the args and kwargs parameters
-     * Not tested - same as initial code, but moved from class constructor method conditional
      */
     private void oneArgument() {
         if (kwargs.get("year") != null) {
@@ -281,18 +295,14 @@ public class Date extends org.python.types.Object {
      * @return month attribute
      */
     @org.python.Method(__doc__ = "")
-        private org.python.Object __month__() {
-        return this.month;
-    }
+        private org.python.Object __month__() { return this.month; }
 
     /**
      * Getter for day instance attribute - between 1 and the number of days in the given month of the given year
      * @return day attribute
      */
     @org.python.Method(__doc__ = "")
-        private org.python.Object __day__() {
-        return this.day;
-    }
+        private org.python.Object __day__() { return this.day; }
 
     /**
      * The latest representable date
