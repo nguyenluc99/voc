@@ -1,8 +1,9 @@
 package org.python.stdlib.datetime;
 
 import java.util.Collections;
+import java.lang.Comparable;
 
-public class DateTime extends org.python.types.Object {
+public class DateTime extends org.python.types.Object implements Comparable{
     private final int YEAR_INDEX = 0;
     private final int MONTH_INDEX = 1;
     private final int DAY_INDEX = 2;
@@ -42,6 +43,17 @@ public class DateTime extends org.python.types.Object {
 
     @org.python.Attribute
     public static final org.python.Object max = __max__();
+
+    public int compareTo(DateTime date) {
+
+        for (int i = 0; i <= MICROSECOND_INDEX; i++) {
+            int comparison = this.timeUnits[i].compareTo(date.timeUnits[i]);
+            if (comparison != 0) {
+                return comparison;
+            }
+        }
+        return 0;
+    }
 
     public DateTime(org.python.Object[] args, java.util.Map<java.lang.String, org.python.Object> kwargs) {
 	super();

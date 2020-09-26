@@ -78,6 +78,22 @@ public class DateTimeTests {
         date = new DateTime(args, Collections.emptyMap());
         assertEquals(date.__str__(), new Str("9999-12-31 23:59:59.999999"));
     }
+
+    @Test
+    public void test_comparator() {
+        Int[] args = {Int.getInt(5), Int.getInt(6), Int.getInt(7)};
+        DateTime date1 = new DateTime(args,Collections.emptyMap());
+        DateTime date2 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.compareTo(date2), 0);
+
+        args[0] = Int.getInt(6);
+        date2 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.compareTo(date2), -1);
+
+        args[0] = Int.getInt(4);
+        date2 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.compareTo(date2), 1);
+    }
 }
 
 
