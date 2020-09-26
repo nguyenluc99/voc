@@ -1580,4 +1580,51 @@ public class DateTest {
         this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(32));
         this.assertError(DateTimeEnum.DAY_VAL_ERR.toString(), ValueError.class);
     }
+
+    /**
+     * Test Date() creation without arguments - expect TypeError
+     */
+    @Test
+    @DisplayName("Test Date() creation without arguments - expect TypeError")
+    public void testCreationWithNoArg() {
+        this.args = new Object[]{};
+        assertError(String.format(DateTimeEnum.YR_MISS_ERR.toString(), 4), TypeError.class);
+    }
+    /**
+     * Test Ctime() function
+     */
+    @Test
+    @DisplayName("Test Ctime() function")
+    public void testCtime() {
+        this.args = new Object[]{intToObj(2020), intToObj(9), intToObj(26)};
+        this.newDate = new Date(this.args, this.kwargs);
+        assertEquals(this.newDate.ctime(), new org.python.types.Str("Sat Sep 26 00:00:00 2020"));
+        // year < 10, day < 10
+        this.args = new Object[]{intToObj(1), intToObj(1), intToObj(1)};
+        this.newDate = new Date(this.args, this.kwargs);
+        assertEquals(this.newDate.ctime(), new org.python.types.Str("Sat Jan  1 00:00:00 0001"));
+        // year < 100
+        this.args = new Object[]{intToObj(20), intToObj(12), intToObj(31)};
+        this.newDate = new Date(this.args, this.kwargs);
+        assertEquals(this.newDate.ctime(), new org.python.types.Str("Tue Dec 31 00:00:00 0020"));
+        // year < 1000
+        this.args = new Object[]{intToObj(300), intToObj(2), intToObj(29)};
+        this.newDate = new Date(this.args, this.kwargs);
+        assertEquals(this.newDate.ctime(), new org.python.types.Str("Thu Feb 29 00:00:00 0300"));
+        this.args = new Object[]{intToObj(this.maxYear), intToObj(this.maxMonth), intToObj(this.maxDay)};
+        this.newDate = new Date(this.args, this.kwargs);
+        assertEquals(this.newDate.ctime(), new org.python.types.Str("Fri Dec 31 00:00:00 9999"));
+    }
+
+    /**
+     * Test Date() creation with one argument of day - expect TypeError
+     */
+    @Test
+    @DisplayName("Test Date() creation with one argument of day - expect TypeError")
+    public void testOneKwargWithDay() {
+        this.args = new Object[]{};
+        this.kwargs.put(DateTimeEnum.DAY.toString(), intToObj(this.maxDay));
+        assertError(String.format(DateTimeEnum.YR_MISS_ERR.toString(), 1), TypeError.class);
+
+    }
 }
