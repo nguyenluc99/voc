@@ -28,12 +28,13 @@ public class DateTimeTests {
         System.out.println(Collections.emptyMap());
         DateTime date = new DateTime(args, Collections.emptyMap());
         
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SS");
         LocalDateTime now = LocalDateTime.now(); 
         System.out.println(date.__str__());
-        //Str date_str = new Str(date.today());
-        org.python.Object date2 = date.today();
-        String date3 = (String) date2.__str__().toJava();
-        assertEquals(date3, new Str(dtf.format(now)));
+
+        org.python.Object python_date_full = date.today();
+        String java_date_full = (String) python_date_full.__str__().toJava();
+        String java_date_reduced = java_date_full.substring(0,java_date_full.length()-4);
+        assertEquals(new Str(dtf.format(now)),new Str(java_date_reduced) );
     }
 }
