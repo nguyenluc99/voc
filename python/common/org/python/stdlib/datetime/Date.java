@@ -8,7 +8,7 @@ import java.time.LocalDate;
 /**
  * Java class for Python's datetime.date class
  * Assumes syntax order of input is correct. That is, args are always before kwargs
- * Last edited: 25/09/2020
+ * Last edited: 26/09/2020
  */
 public class Date extends org.python.types.Object {
 
@@ -17,8 +17,8 @@ public class Date extends org.python.types.Object {
     private final int maxDay = 31;
     private final int minDate = 1;
 
-    private Map<String, Object> kwargs;
-    private Object[] args;
+    private final Map<String, Object> kwargs;
+    private final Object[] args;
 
     @org.python.Attribute
     public org.python.Object year = __year__();
@@ -30,10 +30,10 @@ public class Date extends org.python.types.Object {
     public org.python.Object day = __day__();
 
     @org.python.Attribute
-    public static final org.python.Object min = __min__();
+    public static final Date min = __min__();
 
     @org.python.Attribute
-    public static final org.python.Object max = __max__();
+    public static final Date max = __max__();
 
     /**
      * Class constructor for datetime.date.
@@ -270,46 +270,36 @@ public class Date extends org.python.types.Object {
     }
 
     /**
-     * Not tested
-     * @return
+     * Getter for year instance attribute - between MINYEAR and MAXYEAR inclusive
+     * @return year attribute
      */
-    public static org.python.Object constant_4() {
-	    return org.python.types.Int.getInt(4);
+    @org.python.Method(__doc__ = "")
+        private org.python.Object __year__() { return this.year; }
+
+    /**
+     * Getter for month instance attribute - between 1 and 12 inclusive.
+     * @return month attribute
+     */
+    @org.python.Method(__doc__ = "")
+        private org.python.Object __month__() {
+        return this.month;
     }
 
     /**
-     * Not tested
-     * @return
+     * Getter for day instance attribute - between 1 and the number of days in the given month of the given year
+     * @return day attribute
      */
     @org.python.Method(__doc__ = "")
-        public org.python.types.Str __year__() {
-        return new org.python.types.Str(this.year + "");
+        private org.python.Object __day__() {
+        return this.day;
     }
 
     /**
-     * Not tested
-     * @return
+     * The latest representable date
+     * @return date(MAXYEAR, 12, 31)
      */
     @org.python.Method(__doc__ = "")
-        public org.python.types.Str __month__() {
-        return new org.python.types.Str(this.month + "");
-    }
-
-    /**
-     * Not tested
-     * @return
-     */
-    @org.python.Method(__doc__ = "")
-        public org.python.types.Str __day__() {
-        return new org.python.types.Str(this.day + "");
-    }
-
-    /**
-     * Not tested
-     * @return
-     */
-    @org.python.Method(__doc__ = "")
-    private static org.python.Object __max__() {
+    private static Date __max__() {
         org.python.types.Int day = org.python.types.Int.getInt(31);
         org.python.types.Int month = org.python.types.Int.getInt(12);
         org.python.types.Int year = org.python.types.Int.getInt(9999);
@@ -318,11 +308,11 @@ public class Date extends org.python.types.Object {
     }
 
     /**
-     * Not tested
-     * @return
+     * The earliest representable date
+     * @return date(MINYEAR, 1, 1)
      */
     @org.python.Method(__doc__ = "")
-    private static org.python.Object __min__() {
+    private static Date __min__() {
         org.python.types.Int day = org.python.types.Int.getInt(1);
         org.python.types.Int month = org.python.types.Int.getInt(1);
         org.python.types.Int year = org.python.types.Int.getInt(1);
@@ -359,8 +349,8 @@ public class Date extends org.python.types.Object {
     }
 
     /**
-     * Not tested
-     * @return
+     * Return the day of the week as an integer, where Monday is 0 and Sunday is 6
+     * @return integer in range [0, 6] representing Monday to Sunday, respectively
      */
     @org.python.Method(__doc__ = "")
     public org.python.Object weekday() {
