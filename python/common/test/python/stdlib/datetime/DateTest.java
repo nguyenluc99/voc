@@ -1225,4 +1225,258 @@ public class DateTest {
         this.newDate = new Date(this.args, this.kwargs);
         assertEquals(intToObj(this.maxDay), this.newDate.day);
     }
+
+    /**
+     * Test Date() creation max day range for February during a leap year
+     */
+    @Test
+    @DisplayName("Test Date() creation max day range for February during a leap year")
+    public void testDateCreationMaxDayRangeFebruaryLeapYear() {
+        this.args = new Object[]{};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2020));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(2));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(29));
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(2020, 2, 29);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2020));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(2));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(30));
+        this.assertError(DateTimeEnum.DAY_VAL_ERR.toString(), ValueError.class);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2028));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(2));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(29));
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(2028, 2, 29);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2028));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(2));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(30));
+        this.assertError(DateTimeEnum.DAY_VAL_ERR.toString(), ValueError.class);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2012));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(2));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(29));
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(2012, 2, 29);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2012));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(2));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(30));
+        this.assertError(DateTimeEnum.DAY_VAL_ERR.toString(), ValueError.class);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(1996));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(2));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(29));
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(1996, 2, 29);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(1996));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(2));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(30));
+        this.assertError(DateTimeEnum.DAY_VAL_ERR.toString(), ValueError.class);
+    }
+
+    /**
+     * Test Date() creation max day range for February not during a leap year
+     */
+    @Test
+    @DisplayName("Test Date() creation max day range for February not during a leap year")
+    public void testDateCreationMaxDayRangeFebruaryNotLeapYear() {
+        this.args = new Object[]{};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2019));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(2));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(28));
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(2019, 2, 28);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2019));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(2));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(29));
+        this.assertError(DateTimeEnum.DAY_VAL_ERR.toString(), ValueError.class);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2021));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(2));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(28));
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(2021, 2, 28);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2021));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(2));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(29));
+        this.assertError(DateTimeEnum.DAY_VAL_ERR.toString(), ValueError.class);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2018));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(2));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(28));
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(2018, 2, 28);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2018));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(2));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(29));
+        this.assertError(DateTimeEnum.DAY_VAL_ERR.toString(), ValueError.class);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2017));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(2));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(28));
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(2017, 2, 28);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2017));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(2));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(29));
+        this.assertError(DateTimeEnum.DAY_VAL_ERR.toString(), ValueError.class);
+    }
+
+    /**
+     * Test Date() creation max day range for 30 day months
+     */
+    @Test
+    @DisplayName("Test Date() creation max day range for 30 day months")
+    public void testDateCreationMaxDayRangeThirtyDayMonths() {
+        this.args = new Object[]{};
+
+        // April
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2020));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(4));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(30));
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(2020, 4, 30);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2020));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(4));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(31));
+        this.assertError(DateTimeEnum.DAY_VAL_ERR.toString(), ValueError.class);
+
+        // June
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2020));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(6));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(30));
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(2020, 6, 30);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2020));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(6));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(31));
+        this.assertError(DateTimeEnum.DAY_VAL_ERR.toString(), ValueError.class);
+
+        // September
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2020));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(9));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(30));
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(2020, 9, 30);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2020));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(9));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(31));
+        this.assertError(DateTimeEnum.DAY_VAL_ERR.toString(), ValueError.class);
+
+        // November
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2020));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(11));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(30));
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(2020, 11, 30);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2020));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(11));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(31));
+        this.assertError(DateTimeEnum.DAY_VAL_ERR.toString(), ValueError.class);
+    }
+
+    /**
+     * Test Date() creation max day range for 30 day months
+     */
+    @Test
+    @DisplayName("Test Date() creation max day range for 31 day months")
+    public void testDateCreationMaxDayRangeThirtyOneDayMonths() {
+        this.args = new Object[]{};
+
+        // January
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2020));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(1));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(31));
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(2020, 1, 31);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2020));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(1));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(32));
+        this.assertError(DateTimeEnum.DAY_VAL_ERR.toString(), ValueError.class);
+
+        // March
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2020));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(3));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(31));
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(2020, 3, 31);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2020));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(3));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(32));
+        this.assertError(DateTimeEnum.DAY_VAL_ERR.toString(), ValueError.class);
+
+        // May
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2020));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(5));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(31));
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(2020, 5, 31);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2020));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(5));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(32));
+        this.assertError(DateTimeEnum.DAY_VAL_ERR.toString(), ValueError.class);
+
+        // July
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2020));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(7));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(31));
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(2020, 7, 31);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2020));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(7));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(32));
+        this.assertError(DateTimeEnum.DAY_VAL_ERR.toString(), ValueError.class);
+
+        // August
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2020));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(8));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(31));
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(2020, 8, 31);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2020));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(8));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(32));
+        this.assertError(DateTimeEnum.DAY_VAL_ERR.toString(), ValueError.class);
+
+        // October
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2020));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(10));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(31));
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(2020, 10, 31);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2020));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(10));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(32));
+        this.assertError(DateTimeEnum.DAY_VAL_ERR.toString(), ValueError.class);
+
+        // December
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2020));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(12));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(31));
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(2020, 12, 31);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(2020));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(12));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(32));
+        this.assertError(DateTimeEnum.DAY_VAL_ERR.toString(), ValueError.class);
+    }
 }
