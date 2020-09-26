@@ -25,12 +25,11 @@ public class DateTimeTests {
     public void test_today() {
         
         Int[] args = {Int.getInt(1), Int.getInt(2), Int.getInt(3)};
-        System.out.println(Collections.emptyMap());
         DateTime date = new DateTime(args, Collections.emptyMap());
         
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SS");
         LocalDateTime now = LocalDateTime.now(); 
-        System.out.println(date.__str__());
+
 
         org.python.Object python_date_full = date.today();
         String java_date_full = (String) python_date_full.__str__().toJava();
