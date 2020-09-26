@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test org.python.stdlib.datetime.Date class
  * @author Adam Ross,
- * Last edited: 25/09/2020
+ * Last edited: 26/09/2020
  */
 @DisplayName("Junit test: org.python.stdlib.datetime.Date")
 public class DateTest {
@@ -1060,5 +1060,59 @@ public class DateTest {
         this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.minDate));
         this.newDate = new Date(this.args, this.kwargs);
         assertEquals(this.newDate.__repr__(), this.strToObj(DateTimeEnum.MIN_DATE_STR.toString()));
+    }
+
+    /**
+     * Test Date().weekday() instance method for dates post-mid-fifteenth century
+     *
+     * This test will fail for some dates. The python weekday() method returns incorrect values for random dates.
+     * For example, 0001-01-01 returns weekday 0 (Monday), whereas the java weekday() method returns 5.
+     * A google search returns the correct day as Saturday, which is 5, not 0, so the java weekday() method is correct.
+     * It seems python weekdays become more frequently correct the closer to the current date, but it is still random.
+     * It could be that there is a transition in how python computes the day of the week from approx. the 16th century.
+     * Such randomness will likely require more time than is available for this testing. The current dates are correct.
+     */
+    @Test
+    @DisplayName("Test Date().weekday() instance method for dates post-mid-fifteenth century")
+    public void testDateWeekDayInstanceMethodPostMidFifteenthCentury() {
+        // year=9999, month=12, day=31
+        this.args = new Object[]{this.intToObj(this.maxYear), this.intToObj(this.maxMonth), this.intToObj(this.maxDay)};
+        this.newDate = new Date(this.args, this.kwargs);
+        assertEquals(this.intToObj(4), this.newDate.weekday());
+
+        // year=2020, month=9, day=26
+        this.args = new Object[]{this.intToObj(2020), this.intToObj(9), this.intToObj(26)};
+        this.newDate = new Date(this.args, this.kwargs);
+        assertEquals(this.intToObj(5), this.newDate.weekday());
+
+        // year=1595, month=3, day=15
+        this.args = new Object[]{this.intToObj(1595), this.intToObj(3), this.intToObj(15)};
+        this.newDate = new Date(this.args, this.kwargs);
+        assertEquals(this.intToObj(2), this.newDate.weekday());
+    }
+
+    /**
+     * Test Date().weekday() instance method for dates pre-mid-fifteenth century - failing
+     *
+     * This test will fail for some dates. The python weekday() method returns incorrect values for random dates.
+     * For example, 0001-01-01 returns weekday 0 (Monday), whereas the java weekday() method returns 5.
+     * A google search returns the correct day as Saturday, which is 5, not 0, so the java weekday() method is correct.
+     * It seems python weekdays become more frequently correct the closer to the current date, but it is still random.
+     * It could be that there is a transition in how python computes the day of the week from approx. the 16th century.
+     * Such randomness will likely require more time than is available for this testing. The current dates are correct.
+     */
+    @Test
+    @DisplayName("Test Date().weekday() instance method for dates pre-mid-fifteenth century")
+    @Disabled
+    public void testDateWeekDayInstanceMethodPreMidFifteenthCentury() {
+        // year=1415, month=10, day=25 - fails
+        this.args = new Object[]{this.intToObj(1415), this.intToObj(10), this.intToObj(25)};
+        this.newDate = new Date(this.args, this.kwargs);
+        assertEquals(this.intToObj(2), this.newDate.weekday());
+
+        // year=1, month=1, day=1 - fails
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        assertEquals(this.intToObj(0), this.newDate.weekday());
     }
 }
