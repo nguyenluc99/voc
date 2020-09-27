@@ -2,7 +2,7 @@ package org.python.stdlib.datetime;
 
 /**
  * Enum class for datetime.date
- * Last edited: 26/09/2020
+ * Last edited: 27/09/2020
  */
 public enum DateTimeEnum {
 
@@ -23,7 +23,14 @@ public enum DateTimeEnum {
     ERROR("error"),
     NO_ERROR("no error"),
     MIN_DATE_STR("0001-01-01"),
-    MAX_DATE_STR("9999-12-31");
+    MAX_DATE_STR("9999-12-31"),
+    MON("MONDAY"),
+    TUE("TUESDAY"),
+    WED("WEDNESDAY"),
+    THU("THURSDAY"),
+    FRI("FRIDAY"),
+    SAT("SATURDAY"),
+    SUN("SUNDAY");
 
     private final String dateTimeEnum;
 
