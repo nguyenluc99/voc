@@ -20,6 +20,7 @@ public class DateTimeTests {
         System.out.println(date.__str__());
         assertEquals(date.__str__(), new Str("0001-02-03 00:00:00"));
     }
+
     @Test
     public void test_today() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SS");
@@ -43,24 +44,10 @@ public class DateTimeTests {
         String java_date_full = (String) python_date_yymmdd.__str__().toJava();
         assertEquals(new Str(dtf.format(now)), new Str(java_date_full));
     }
-    //Maybe these should be removed
-    @Test
-    public void test___year__() {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy");
-        LocalDateTime now = LocalDateTime.now(); 
 
-        
-        DateTime python_date_full = (DateTime) DateTime.today();
-        org.python.Object python_date_yy = python_date_full.__year__();
-        String java_date_full = (String) python_date_yy.__str__().toJava();
-        assertEquals(new Str(dtf.format(now)), new Str(java_date_full));
-    }
-
-
-    //______________
     @Test
     public void test_weekday() {
-        //Test today
+
         DateTime python_date_full = (DateTime) DateTime.today();
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK);
@@ -69,8 +56,7 @@ public class DateTimeTests {
         assertEquals(python_date_full.weekday().toJava(), week_day);
     }
 
-
-    @Test
+    @Test 
     public void test_isoformat() {
         String separator = "T";
         org.python.types.Str python_separator = (org.python.types.Str) new Str(separator);

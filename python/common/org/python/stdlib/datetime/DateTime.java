@@ -218,7 +218,7 @@ public class DateTime extends org.python.types.Object {
 
     @org.python.Method(__doc__ = "")
     public org.python.Object weekday() {
-	//Maybe break this out to a function/method
+
 	org.python.types.Str y_py = (org.python.types.Str) this.year;
 	String y_str = (String) y_py.toJava();
 	double y = Double.parseDouble(y_str);
@@ -230,9 +230,6 @@ public class DateTime extends org.python.types.Object {
 	org.python.types.Str d_py = (org.python.types.Str) this.year;
 	String d_str = (String) d_py.toJava();
 	double d = Double.parseDouble(m_str);
-	//String y = ((org.python.types.Str) this.year).toJava();
-	//double m = ((org.python.types.Int) this.month).value;
-	//double d = ((org.python.types.Int) this.day).value;
 
 	java.util.Date myCalendar = new java.util.GregorianCalendar((int) y, (int) m , (int) d).getTime();
 	java.util.Calendar c = java.util.Calendar.getInstance();
@@ -255,7 +252,6 @@ public class DateTime extends org.python.types.Object {
 			throw new org.python.exceptions.TypeError("isoformat() argument 1 must be a unicode character, not " + separatorArg.typeName());
 	}
 
-	//Maybe break this out to a function/method
 	org.python.types.Str y_py = (org.python.types.Str) this.year;
 	String y_str = (String) y_py.toJava();
 
@@ -291,7 +287,6 @@ public class DateTime extends org.python.types.Object {
 
 	org.python.types.Str mic_py = (org.python.types.Str) this.microsecond;
 	String mic_str = (String) mic_py.toJava();
-	
 
 	String iso_time;
 	if (mic_str == "0") {
@@ -300,10 +295,5 @@ public class DateTime extends org.python.types.Object {
 		iso_time =  y_str + "-" + m_str + "-" + d_str  + separator + h_str + ":" +  min_str + ":" + s_str + "." + mic_str;
 	}
 	return new Str(iso_time);
-	//String y = ((org.python.types.Str) this.year).toJava();
-	//double m = ((org.python.types.Int) this.month).value;
-	//double d = ((org.python.types.Int) this.day).value;
-
-
     }
 }
