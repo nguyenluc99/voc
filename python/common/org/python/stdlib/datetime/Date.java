@@ -379,9 +379,22 @@ public class Date extends org.python.types.Object {
         String monthStr = monthList[(int) monthNum - 1];
 
         String[] weekdayList = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
-        double weekdayNum = ((org.python.types.Int) weekday()).value;
-        String weekdayStr = weekdayList[(int) weekdayNum];
-        return new org.python.types.Str(weekdayStr + " " + monthStr + "  " + this.day + " 00:00:00 " + this.year);
+        String weekdayStr = weekdayList[(int) this.weekday().value];
+
+        long dayNum = this.day.value;
+        String dayStr = Long.toString(dayNum);
+        if (dayNum < 10) dayStr = " " + dayStr;
+
+        long yearNum = this.year.value;
+        String yearStr = Long.toString(yearNum);
+        if (yearNum < 10) {
+            yearStr = "000" + yearStr;
+        } else if (yearNum < 100) {
+            yearStr = "00" + yearStr;
+        } else if (yearNum < 1000) {
+            yearStr = "0" + yearStr;
+        }
+        return new org.python.types.Str(weekdayStr + " " + monthStr + " " + dayStr + " 00:00:00 " + yearStr);
     }
 
     @org.python.Method(
