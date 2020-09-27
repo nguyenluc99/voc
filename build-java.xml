@@ -59,7 +59,7 @@
     </junitreport>
   </target>
 
-  <target name="test" depends="test.console.launcher" />
+  <target name="test" depends="test.console.launcher, test.junit.launcher" />
 
 
   <target name="compile_stdlib" description="Compile the standard library">
