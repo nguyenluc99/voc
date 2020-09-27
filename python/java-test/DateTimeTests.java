@@ -149,6 +149,16 @@ public class DateTimeTests {
         assertEquals(new Str(dtf1.format(now) + separator + dtf2.format(now)), new Str(java_iso_reduced));
     }
 
+    @Test
+    public void test_fromisoformat() {
+
+        Str isoString = new Str("9999-12-31");
+
+        DateTime fromIso = (DateTime) DateTime.fromisoformat(isoString);
+
+        assertEquals(fromIso.__str__(), new Str("9999-12-31 00:00:00"));
+    }
+
 }
 
 
