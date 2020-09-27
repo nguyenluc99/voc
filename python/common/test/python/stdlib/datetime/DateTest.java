@@ -1096,17 +1096,10 @@ public class DateTest {
     }
 
     /**
-     * Test Date().weekday() instance method for dates post-mid-sixteenth century
-     *
-     * This test will fail for some dates. The python weekday() method returns incorrect values for random dates.
-     * For example, 0001-01-01 returns weekday 0 (Monday), whereas the java weekday() method returns 5.
-     * A google search returns the correct day as Saturday, which is 5, not 0, so the java weekday() method is correct.
-     * It seems python weekdays become more frequently correct the closer to the current date, but it is still random.
-     * It could be that there is a transition in how python computes the day of the week from approx. the 16th century.
-     * Such randomness will likely require more time than is available for this testing. The current dates are correct.
+     * Test Date().weekday() instance method for 10 random dates between 0001-01-01 to 9999-12-31
      */
     @Test
-    @DisplayName("Test Date().weekday() instance method for dates post-mid-sixteenth century")
+    @DisplayName("Test Date().weekday() instance method for 10 random dates between 0001-01-01 to 9999-12-31")
     public void testDateWeekDayInstanceMethodPostMidSixteenthCentury() {
         // year=9999, month=12, day=31
         this.args = new Object[]{this.intToObj(this.maxYear), this.intToObj(this.maxMonth), this.intToObj(this.maxDay)};
@@ -1122,31 +1115,41 @@ public class DateTest {
         this.args = new Object[]{this.intToObj(1595), this.intToObj(3), this.intToObj(15)};
         this.newDate = new Date(this.args, this.kwargs);
         assertEquals(this.intToObj(2), this.newDate.weekday());
-    }
 
-    /**
-     * Test Date().weekday() instance method for dates pre-mid-sixteenth century - failing
-     *
-     * This test will fail for some dates. The python weekday() method returns incorrect values for random dates.
-     * For example, 0001-01-01 returns weekday 0 (Monday), whereas the java weekday() method returns 5.
-     * A google search returns the correct day as Saturday, which is 5, not 0, so the java weekday() method is correct.
-     * It seems python weekdays become more frequently correct the closer to the current date, but it is still random.
-     * It could be that there is a transition in how python computes the day of the week from approx. the 16th century.
-     * Such randomness will likely require more time than is available for this testing. The current dates are correct.
-     */
-    @Test
-    @DisplayName("Test Date().weekday() instance method for dates pre-mid-sixteenth century")
-    @Disabled
-    public void testDateWeekDayInstanceMethodPreMidSixteenthCentury() {
-        // year=1415, month=10, day=25 - fails
+        // year=1415, month=10, day=25
         this.args = new Object[]{this.intToObj(1415), this.intToObj(10), this.intToObj(25)};
         this.newDate = new Date(this.args, this.kwargs);
         assertEquals(this.intToObj(2), this.newDate.weekday());
 
-        // year=1, month=1, day=1 - fails
+        // year=1, month=1, day=1
         this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
         this.newDate = new Date(this.args, this.kwargs);
         assertEquals(this.intToObj(0), this.newDate.weekday());
+
+        // year=1066, month=10, day=14
+        this.args = new Object[]{this.intToObj(1066), this.intToObj(10), this.intToObj(14)};
+        this.newDate = new Date(this.args, this.kwargs);
+        assertEquals(this.intToObj(6), this.newDate.weekday());
+
+        // year=1776, month=7, day=4
+        this.args = new Object[]{this.intToObj(1766), this.intToObj(7), this.intToObj(4)};
+        this.newDate = new Date(this.args, this.kwargs);
+        assertEquals(this.intToObj(4), this.newDate.weekday());
+
+        // year=1945, month=8, day=15
+        this.args = new Object[]{this.intToObj(1945), this.intToObj(8), this.intToObj(15)};
+        this.newDate = new Date(this.args, this.kwargs);
+        assertEquals(this.intToObj(2), this.newDate.weekday());
+
+        // year=1929, month=10, day=29
+        this.args = new Object[]{this.intToObj(1929), this.intToObj(10), this.intToObj(29)};
+        this.newDate = new Date(this.args, this.kwargs);
+        assertEquals(this.intToObj(1), this.newDate.weekday());
+
+        // year=793, month=6, day=8
+        this.args = new Object[]{this.intToObj(793), this.intToObj(6), this.intToObj(8)};
+        this.newDate = new Date(this.args, this.kwargs);
+        assertEquals(this.intToObj(1), this.newDate.weekday());
     }
 
     /**
