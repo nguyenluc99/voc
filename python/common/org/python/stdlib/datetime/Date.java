@@ -38,7 +38,7 @@ import java.time.LocalDate;
             "__repr__() -- (instance method) return string representation of Date object, format: YYYY-MM-DD\n" +
             "today() -- (class method) return current local date\n" +
             "ctime() -- (instance method) return a string representing the date, format: Wed Dec  D HH:MM:SS YYYY\n" +
-            "weekday() -- (instance method) integer in range [0, 6] representing Monday to Sunday, respectively\n" +
+            "weekday() -- (instance method) return int in range [0, 6] representing Monday to Sunday, respectively\n" +
             "replace() -- (instance method) return a Date() instance with either replaced attributes or without changes"
 )
 public class Date extends org.python.types.Object {
@@ -139,7 +139,7 @@ public class Date extends org.python.types.Object {
      * Validates types and kwarg keys are correct, otherwise throws a Python Type error with the correct message
      */
     private void validateThreeInputs() {
-        this.validateArgTypes();
+        this.validateArgTypes(null);
 
         // Checks if there are kwargs that the key "day" exists, otherwise throws TypeError
         if (this.kwargs.size() > 0 && !this.kwargs.containsKey(DateTimeEnum.DAY.toString())) {
@@ -150,7 +150,7 @@ public class Date extends org.python.types.Object {
         if (this.kwargs.size() > 1 && !this.kwargs.containsKey(DateTimeEnum.MONTH.toString())) {
             throw new org.python.exceptions.TypeError(DateTimeEnum.MON_MISS_ERR.toString());
         }
-        this.validateKwargTypes();
+        this.validateKwargTypes(null);
     }
 
     /**
@@ -158,7 +158,7 @@ public class Date extends org.python.types.Object {
      * Validates input and checks kwarg keys to throw a Python TypeError with the correct message
      */
     private void validateTwoInputs() {
-        this.validateArgTypes();
+        this.validateArgTypes(null);
 
         if (args.length == 2) {
             throw new org.python.exceptions.TypeError(DateTimeEnum.DAY_MISS_ERR.toString());
@@ -178,11 +178,11 @@ public class Date extends org.python.types.Object {
             if (this.kwargs.containsKey(DateTimeEnum.YEAR.toString()) &&
                 this.kwargs.containsKey(DateTimeEnum.DAY.toString())) {
                 this.kwargs.put(DateTimeEnum.DAY.toString(), org.python.types.Int.getInt(this.maxDay));
-                this.validateKwargTypes();
+                this.validateKwargTypes(null);
                 throw new org.python.exceptions.TypeError(DateTimeEnum.MON_MISS_ERR.toString());
             }
         }
-        this.validateKwargTypes();
+        this.validateKwargTypes(null);
         throw new org.python.exceptions.TypeError(DateTimeEnum.DAY_MISS_ERR.toString());
     }
 
@@ -191,19 +191,27 @@ public class Date extends org.python.types.Object {
      * Validates input and checks kwarg keys to return a Python TypeError with the correct message
      */
     private void validateOneInput() {
-        this.validateArgTypes();
+        this.validateArgTypes(null);
 
         if (kwargs.containsKey(DateTimeEnum.DAY.toString()) || kwargs.containsKey(DateTimeEnum.MONTH.toString())) {
             throw new org.python.exceptions.TypeError(DateTimeEnum.YR_MISS_ERR.toString());
         }
-        this.validateKwargTypes();
+        this.validateKwargTypes(null);
         throw new org.python.exceptions.TypeError(DateTimeEnum.MON_MISS_ERR.toString());
     }
 
     /**
      * Validates arg input values are of type Integer, otherwise throws exception
+     * @param args Array of Date attributes
      */
-    private void validateArgTypes() {
+    private void validateArgTypes(Object[] args) {
+        boolean isInstanceArgs = false;
+
+        if (args == null) {
+            args = this.args;
+            isInstanceArgs = true;
+        }
+
         for (int i = 0; i < args.length; i++) {
             if (args[i] == null) {
                 throw new org.python.exceptions.TypeError(DateTimeEnum.NONE_TYPE_ERR.toString());
@@ -215,9 +223,17 @@ public class Date extends org.python.types.Object {
 
             if (args[i] instanceof org.python.types.Bool) {
                 if (((org.python.types.Bool) args[i].__bool__()).value) {
-                    args[i] = org.python.types.Int.getInt(1);
+                    if (isInstanceArgs) {
+                        this.args[i] = org.python.types.Int.getInt(1);
+                    } else {
+                        args[i] = org.python.types.Int.getInt(1);
+                    }
                 } else {
-                    args[i] = org.python.types.Int.getInt(0);
+                    if (isInstanceArgs) {
+                        this.args[i] = org.python.types.Int.getInt(0);
+                    } else {
+                        args[i] = org.python.types.Int.getInt(0);
+                    }
                 }
             }
 
@@ -229,9 +245,14 @@ public class Date extends org.python.types.Object {
 
     /**
      * Validates kwarg input values are of type Integer, otherwise throws exception
+     * @param kwargs HashMap of Date attributes
      */
-    private void validateKwargTypes() {
-        for (Map.Entry<String, Object> kwarg : this.kwargs.entrySet()) {
+    private void validateKwargTypes(Map<String, Object> kwargs) {
+        if (kwargs == null) {
+            kwargs = this.kwargs;
+        }
+
+        for (Map.Entry<String, Object> kwarg : kwargs.entrySet()) {
             if (kwarg.getValue() == null) {
                 throw new org.python.exceptions.TypeError(DateTimeEnum.NONE_TYPE_ERR.toString());
             }
@@ -332,7 +353,7 @@ public class Date extends org.python.types.Object {
         org.python.types.Int month = org.python.types.Int.getInt(1);
         org.python.types.Int year = org.python.types.Int.getInt(1);
         org.python.Object[] args = { year, month, day };
-	return new Date(args, Collections.emptyMap());
+        return new Date(args, Collections.emptyMap());
     }
 
     @org.python.Method(
@@ -381,6 +402,54 @@ public class Date extends org.python.types.Object {
         kwargs = "newKwargs"
     )
     public Date replace(org.python.Object[] newArgs, java.util.Map<java.lang.String, org.python.Object> newKwargs) {
-        return null;
+        int totalArguments = newArgs.length + newKwargs.size();
+        java.util.Map<java.lang.String, org.python.Object> tempKwargs = new HashMap<>();
+        tempKwargs.put(DateTimeEnum.YEAR.toString(), this.year);
+        tempKwargs.put(DateTimeEnum.MONTH.toString(), this.month);
+        tempKwargs.put(DateTimeEnum.DAY.toString(), this.day);
+
+        if (totalArguments < 4) {
+            if (totalArguments > 0) {
+                for (Map.Entry<String, Object> kwarg : newKwargs.entrySet()) {
+                    tempKwargs.put(kwarg.getKey(), kwarg.getValue());
+                }
+                int i = 0;
+
+                if (!newKwargs.containsKey(DateTimeEnum.YEAR.toString()) && i < newArgs.length) {
+                    tempKwargs.put(DateTimeEnum.YEAR.toString(), newArgs[i]);
+                    ++i;
+                }
+
+                if (!newKwargs.containsKey(DateTimeEnum.MONTH.toString()) && i < newArgs.length) {
+                    tempKwargs.put(DateTimeEnum.MONTH.toString(), newArgs[i]);
+                    ++i;
+                }
+
+                if (!newKwargs.containsKey(DateTimeEnum.DAY.toString()) && i < newArgs.length) {
+                    tempKwargs.put(DateTimeEnum.DAY.toString(), newArgs[i]);
+                }
+
+                if (newKwargs.size() != totalArguments && newArgs.length != totalArguments) {
+                    if (newKwargs.containsKey(DateTimeEnum.YEAR.toString())) {
+                        if (newArgs.length == 2) {
+                            this.validateArgTypes(newArgs);
+                        }
+                        tempKwargs.remove(DateTimeEnum.YEAR.toString());
+                        this.validateKwargTypes(tempKwargs);
+                        throw new org.python.exceptions.TypeError(DateTimeEnum.REPLACE_YR_ERR.toString());
+                    } else if (newKwargs.containsKey(DateTimeEnum.MONTH.toString()) && newArgs.length == 2) {
+                        this.validateArgTypes(newArgs);
+                        throw new org.python.exceptions.TypeError(DateTimeEnum.REPLACE_MON_ERR.toString());
+                    }
+                }
+
+                if (newArgs.length == 2) {
+                    this.validateArgTypes(newArgs);
+                }
+                return new Date(new Object[]{}, tempKwargs);
+            }
+            return this;
+        }
+        return new Date(newArgs, newKwargs);
     }
 }
