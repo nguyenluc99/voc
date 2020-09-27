@@ -20,9 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test org.python.stdlib.datetime.Date class
- *
  * @author Adam Ross, Meriton Bytyqi
- * Last edited: 26/09/2020
+ * Last edited: 27/09/2020
  */
 @DisplayName("Junit test: org.python.stdlib.datetime.Date")
 public class DateTest {
