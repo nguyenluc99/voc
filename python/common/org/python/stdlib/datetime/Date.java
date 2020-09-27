@@ -2,6 +2,7 @@ package org.python.stdlib.datetime;
 
 import org.python.Object;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.time.LocalDate;
 
@@ -28,6 +29,7 @@ import java.time.LocalDate;
             "maxMonth -- private final var for the maximum month: 12\n" +
             "maxDay -- private final var for the maximum day: 31\n" +
             "minDate -- private final var for the minimum date for each of year, month and day: 1\n" +
+            "weekdays -- private final var for mapping weekday strings returned from LocalDate to an int in [0, 6]\n" +
             "kwargs -- private final var for HashMap of keyword arguments passed to the class in the kwargs param\n" +
             "args -- private final var for array of argument names passed to the class in the args param\n" +
             "\n" +
@@ -44,6 +46,8 @@ public class Date extends org.python.types.Object {
     private final int maxMonth = 12;
     private final int maxDay = 31;
     private final int minDate = 1;
+
+    private final Map<String, Integer> weekdays;
 
     private final Map<String, Object> kwargs;
     private final Object[] args;
@@ -117,6 +121,16 @@ public class Date extends org.python.types.Object {
             this.day = (org.python.types.Int) this.args[2];
         }
         this.validateAttributeRanges();
+
+        // Set mapping of weekday names Mon - Sun to integers in range [0, 6], respectively
+        this.weekdays = new HashMap<>();
+        this.weekdays.put(DateTimeEnum.MON.toString(), 0);
+        this.weekdays.put(DateTimeEnum.TUE.toString(), 1);
+        this.weekdays.put(DateTimeEnum.WED.toString(), 2);
+        this.weekdays.put(DateTimeEnum.THU.toString(), 3);
+        this.weekdays.put(DateTimeEnum.FRI.toString(), 4);
+        this.weekdays.put(DateTimeEnum.SAT.toString(), 5);
+        this.weekdays.put(DateTimeEnum.SUN.toString(), 6);
     }
 
     /**
@@ -353,16 +367,8 @@ public class Date extends org.python.types.Object {
             "\n" +
             "Method for returning the day of the week as an integer, where Monday is 0 and Sunday is 6."
     )
-    public org.python.Object weekday() {
-        double y = this.year.value;
-        double m = this.month.value;
-        double d = this.day.value;
-
-        java.util.Date myCalendar = new java.util.GregorianCalendar((int) y, (int) m - 1, (int) d).getTime();
-        java.util.Calendar c = java.util.Calendar.getInstance();
-        c.setTime(myCalendar);
-        int day = c.get(java.util.Calendar.DAY_OF_WEEK);
-        int[] convertToPython = { 6, 0, 1, 2, 3, 4, 5 };
-        return org.python.types.Int.getInt(convertToPython[day - 1]);
+    public org.python.types.Int weekday() {
+        int weekdayInt = this.weekdays.get(LocalDate.parse(String.valueOf(this.__repr__())).getDayOfWeek().toString());
+        return org.python.types.Int.getInt(weekdayInt);
     }
 }
