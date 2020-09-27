@@ -5,7 +5,7 @@ import org.python.types.Int;
 import org.python.types.Str;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
-
+import java.util.Calendar;
 import java.time.format.DateTimeFormatter;  
 import java.time.LocalDateTime;    
 
@@ -60,17 +60,31 @@ public class DateTimeTests {
     //______________
     @Test
     public void test_weekday() {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("M");
+        //Test today
+        DateTime python_date_full = (DateTime) DateTime.today();
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+        int[] convertToPython = { 6, 0, 1, 2, 3, 4, 5 };
+        long week_day = convertToPython[day-1]; 
+        assertEquals(python_date_full.weekday().toJava(), week_day);
+    }
+
+
+    @Test
+    public void test_isoformat() {
+        String separator = "T";
+        org.python.types.Str python_separator = (org.python.types.Str) new Str(separator);
+        
+        DateTimeFormatter dtf1 = DateTimeFormatter.ofPattern("YYYY-MM-dd");
+        DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("HH:mm:ss.SS");
         LocalDateTime now = LocalDateTime.now(); 
 
-        
+
         DateTime python_date_full = (DateTime) DateTime.today();
-        //org.python.Object python_date_mm = python_date_full.weekday();
-        //String java_date_full = (String) python_date_mm.__str__().toJava();
-        //org.python.Object week = (org.python.types.Object) python_date_full.weekday();
-        long number = 32;
-        assertEquals(python_date_full.weekday().toJava(), number);
+        org.python.Object python_iso = python_date_full.isoformat(python_separator);
+        String java_time_full = (String) python_iso.__str__().toJava();
+        String java_iso_reduced = java_time_full.substring(0,java_time_full.length()-4);
+        assertEquals(new Str(dtf1.format(now) + separator + dtf2.format(now)), new Str(java_iso_reduced));
     }
-    //______________
 
 }
