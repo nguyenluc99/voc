@@ -357,8 +357,7 @@ public class Date extends org.python.types.Object {
         String monthStr = monthList[(int) monthNum - 1];
 
         String[] weekdayList = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
-        double weekdayNum = ((org.python.types.Int) weekday()).value;
-        String weekdayStr = weekdayList[(int) weekdayNum];
+        String weekdayStr = weekdayList[(int) this.weekday().value];
 
         long dayNum = ((org.python.types.Int) this.day).value;
         String dayStr = new String(Long.toString(dayNum));
