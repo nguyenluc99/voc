@@ -38,7 +38,8 @@ import java.time.LocalDate;
             "__repr__() -- (instance method) return string representation of Date object, format: YYYY-MM-DD\n" +
             "today() -- (class method) return current local date\n" +
             "ctime() -- (instance method) return a string representing the date, format: Wed Dec  D HH:MM:SS YYYY\n" +
-            "weekday() -- (instance method) integer in range [0, 6] representing Monday to Sunday, respectively"
+            "weekday() -- (instance method) integer in range [0, 6] representing Monday to Sunday, respectively\n" +
+            "replace() -- (instance method) return a Date() instance with either replaced attributes or without changes"
 )
 public class Date extends org.python.types.Object {
 
@@ -68,7 +69,7 @@ public class Date extends org.python.types.Object {
     public static final Date max = __max__();
 
     @org.python.Method(
-        __doc__ = "Date(args, kwargs)\n" +
+        __doc__ = "Date(org.python.Object[], java.util.Map<java.lang.String, org.python.Object>)\n" +
             "\n" +
             "Class constructor for datetime.date.\n" +
             "Takes exactly 3 inputs, whether arg, kwarg or both.\n" +
@@ -370,5 +371,16 @@ public class Date extends org.python.types.Object {
     public org.python.types.Int weekday() {
         int weekdayInt = this.weekdays.get(LocalDate.parse(String.valueOf(this.__repr__())).getDayOfWeek().toString());
         return org.python.types.Int.getInt(weekdayInt);
+    }
+
+    @org.python.Method(
+        __doc__ = "replace(org.python.Object[], java.util.Map<java.lang.String, org.python.Object>) -> Date()\n" +
+            "\n" +
+            "Method for replacing attributes in an existing Date() instance and returning that new Date() instance.",
+        args = {"newArgs"},
+        kwargs = "newKwargs"
+    )
+    public Date replace(org.python.Object[] newArgs, java.util.Map<java.lang.String, org.python.Object> newKwargs) {
+        return null;
     }
 }

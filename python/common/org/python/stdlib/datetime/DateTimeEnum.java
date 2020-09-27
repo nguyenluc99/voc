@@ -30,7 +30,9 @@ public enum DateTimeEnum {
     THU("THURSDAY"),
     FRI("FRIDAY"),
     SAT("SATURDAY"),
-    SUN("SUNDAY");
+    SUN("SUNDAY"),
+    REPLACE_YR_ERR("argument for replace() given by name ('year') and position (1)"),
+    REPLACE_MON_ERR("argument for replace() given by name ('month') and position (2)");
 
     private final String dateTimeEnum;
 

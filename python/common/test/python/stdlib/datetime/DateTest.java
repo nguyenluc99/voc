@@ -100,6 +100,17 @@ public class DateTest {
     }
 
     /**
+     * Asserts exception errors for invalid Date.replace() are returned and of the correct type with correct message
+     * @param expectedMsg     expected message for the expected exception error
+     * @param expectedErrType expected type for the expected exception error
+     */
+    private void assertReplaceError(String expectedMsg, Class<? extends Throwable> expectedErrType) {
+        Exception exception = (Exception) assertThrows(expectedErrType, () ->
+            this.newDate.replace(this.args, this.kwargs));
+        assertEquals(expectedMsg, exception.getMessage());
+    }
+
+    /**
      * Initializer before each test
      */
     @BeforeEach
@@ -1581,5 +1592,867 @@ public class DateTest {
         this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(12));
         this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(32));
         this.assertError(DateTimeEnum.DAY_VAL_ERR.toString(), ValueError.class);
+    }
+
+    /**
+     * Test Date().replace() with no inputs in total between args and kwargs
+     */
+    @Test
+    @DisplayName("Test Date().replace() with no inputs in total between args and kwargs")
+    public void testDateReplaceNoInputs() {
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{};
+        this.newDate = this.newDate.replace(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxYear), this.intToObj(this.maxMonth), this.intToObj(this.maxDay)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        this.args = new Object[]{};
+        this.newDate = this.newDate.replace(this.args, this.kwargs);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        this.kwargs.clear();
+        this.newDate = this.newDate.replace(this.args, this.kwargs);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.minDate));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.minDate));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.minDate));
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.kwargs.clear();
+        this.newDate = this.newDate.replace(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+    }
+
+    /**
+     * Test Date().replace() with three valid inputs in total between args and kwargs
+     */
+    @Test
+    @DisplayName("Test Date().replace() with three valid inputs in total between args and kwargs")
+    public void testDateReplaceThreeValidInputs() {
+        // Date(1, 1, 1).replace(9999, 12, 31)
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxYear), this.intToObj(this.maxMonth), this.intToObj(this.maxDay)};
+        this.newDate = this.newDate.replace(this.args, this.kwargs);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        // Date(9999, 12, 31).replace(year=1, month=1, day=1)
+        this.args = new Object[]{};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.minDate));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.minDate));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.minDate));
+        this.newDate = this.newDate.replace(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(year=9999, month=12, day-31).replace(1, 1, 1)
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = this.newDate.replace(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(9999, 12, day=31)
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxYear), this.intToObj(this.maxMonth)};
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.newDate = this.newDate.replace(this.args, this.kwargs);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        // Date(9999, 12, day=31).replace(1, month=1, day=1)
+        this.args = new Object[]{this.intToObj(this.minDate)};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.minDate));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.minDate));
+        this.newDate = this.newDate.replace(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, month=1, day=1).replace(year=9999, month=12, day=31)
+        this.args = new Object[]{};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.newDate = this.newDate.replace(this.args, this.kwargs);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        // Date(year=9999, month=12, day=31).replace(1, 1, day=1)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.minDate));
+        this.newDate = this.newDate.replace(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+    }
+
+    /**
+     * Test Date().replace() with more than three inputs in total between args and kwargs
+     */
+    @Test
+    @DisplayName("Test Date().replace() with more than three inputs in total between args and kwargs")
+    public void testDateReplaceMoreThreeInputs() {
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxYear));
+        this.assertReplaceError(String.format(DateTimeEnum.MAX_ARG_ERR.toString(), 4), TypeError.class);
+    }
+
+    /**
+     * Test Date().replace() with one valid arg input
+     */
+    @Test
+    @DisplayName("Test Date().replace() with one valid arg input")
+    public void testDateReplaceOneValidArgInput() {
+        this.args = new Object[]{this.intToObj(this.maxYear), this.intToObj(this.maxMonth), this.intToObj(this.maxDay)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        this.args = new Object[]{this.intToObj(this.minDate)};
+        this.newDate = this.newDate.replace(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.maxMonth, this.maxDay);
+    }
+
+    /**
+     * Test Date().replace() with two valid arg inputs
+     */
+    @Test
+    @DisplayName("Test Date().replace() with two valid arg inputs")
+    public void testDateReplaceTwoValidArgInputs() {
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxYear), this.intToObj(this.maxMonth)};
+        this.newDate = this.newDate.replace(this.args, this.kwargs);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.minDate);
+    }
+
+    /**
+     * Test Date().replace() with one invalid arg input
+     */
+    @Test
+    @DisplayName("Test Date().replace() with one invalid arg input")
+    public void testDateReplaceOneInvalidArgInput() {
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(null)
+        this.args = new Object[]{null};
+        this.assertReplaceError(DateTimeEnum.NONE_TYPE_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace("str")
+        this.args = new Object[]{strToObj(DateTimeEnum.ERROR.toString())};
+        this.assertReplaceError(DateTimeEnum.STR_TYPE_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(2.0)
+        this.args = new Object[]{doubleToObj(2.0)};
+        this.assertReplaceError(DateTimeEnum.TYPE_ERR.toString() + doubleToObj(2.0).typeName(),
+            TypeError.class);
+    }
+
+    /**
+     * Test Date().replace() with two invalid arg inputs
+     */
+    @Test
+    @DisplayName("Test Date().replace() with two invalid arg inputs")
+    public void testDateReplaceTwoInvalidArgInputs() {
+        this.args = new Object[]{this.intToObj(this.maxYear), this.intToObj(this.maxMonth), this.intToObj(this.maxDay)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        // Date(1, 1, 1).replace(null, "str")
+        this.args = new Object[]{null, strToObj(DateTimeEnum.ERROR.toString())};
+        this.assertReplaceError(DateTimeEnum.NONE_TYPE_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        // Date(1, 1, 1).replace(null, 2.0)
+        this.args = new Object[]{null, doubleToObj(2.0)};
+        this.assertReplaceError(DateTimeEnum.NONE_TYPE_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        // Date(1, 1, 1).replace("str", null)
+        this.args = new Object[]{strToObj(DateTimeEnum.ERROR.toString()), null};
+        this.assertReplaceError(DateTimeEnum.STR_TYPE_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        // Date(1, 1, 1).replace("str", 2.0)
+        this.args = new Object[]{strToObj(DateTimeEnum.ERROR.toString()), doubleToObj(2.0)};
+        this.assertReplaceError(DateTimeEnum.STR_TYPE_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        // Date(1, 1, 1).replace(2.0, null)
+        this.args = new Object[]{doubleToObj(2.0), null};
+        this.assertReplaceError(DateTimeEnum.TYPE_ERR.toString() + doubleToObj(2.0).typeName(),
+            TypeError.class);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        // Date(1, 1, 1).replace(2.0, "str")
+        this.args = new Object[]{doubleToObj(2.0), strToObj(DateTimeEnum.ERROR.toString())};
+        this.assertReplaceError(DateTimeEnum.TYPE_ERR.toString() + doubleToObj(2.0).typeName(),
+            TypeError.class);
+    }
+
+    /**
+     * Test Date().replace() with one valid kwarg input
+     */
+    @Test
+    @DisplayName("Test Date().replace() with one valid kwarg input")
+    public void testDateReplaceOneValidKwargInput() {
+        // Date(9999, 12, 31).replace(day=1)
+        this.args = new Object[]{this.intToObj(this.maxYear), this.intToObj(this.maxMonth), this.intToObj(this.maxDay)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        this.args = new Object[]{};
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.minDate));
+        this.newDate = this.newDate.replace(this.args, this.kwargs);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.minDate);
+
+        // Date(9999, 12, 31).replace(month=1)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.maxYear), this.intToObj(this.maxMonth), this.intToObj(this.maxDay)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        this.args = new Object[]{};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.minDate));
+        this.newDate = this.newDate.replace(this.args, this.kwargs);
+        this.assertAllDate(this.maxYear, this.minDate, this.maxDay);
+
+        // Date(9999, 12, 31).replace(year=1)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.maxYear), this.intToObj(this.maxMonth), this.intToObj(this.maxDay)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        this.args = new Object[]{};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.minDate));
+        this.newDate = this.newDate.replace(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.maxMonth, this.maxDay);
+    }
+
+    /**
+     * Test Date().replace() with two valid kwarg inputs
+     */
+    @Test
+    @DisplayName("Test Date().replace() with two valid kwarg inputs")
+    public void testDateReplaceTwoValidKwargInputs() {
+        // Date(1, 1, 1).replace(month=12, day=31)
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.newDate = this.newDate.replace(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.maxMonth, this.maxDay);
+
+        // Date(1, 1, 1).replace(month=12, year=9999)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.newDate = this.newDate.replace(this.args, this.kwargs);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.minDate);
+
+        // Date(1, 1, 1).replace(day=31, year=9999)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{};
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.newDate = this.newDate.replace(this.args, this.kwargs);
+        this.assertAllDate(this.maxYear, this.minDate, this.maxDay);
+    }
+
+    /**
+     * Test Date().replace() with one invalid kwarg input
+     */
+    @Test
+    @DisplayName("Test Date().replace() with one invalid kwarg input")
+    public void testDateReplaceOneInvalidKwargInput() {
+        this.args = new Object[]{this.intToObj(this.maxYear), this.intToObj(this.maxMonth), this.intToObj(this.maxDay)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        // Date(9999, 12, 31).replace(day=null)
+        this.args = new Object[]{};
+        this.kwargs.put(DateTimeEnum.DAY.toString(), null);
+        this.assertReplaceError(DateTimeEnum.NONE_TYPE_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        // Date(9999, 12, 31).replace(day="str")
+        this.kwargs.clear();
+        this.kwargs.put(DateTimeEnum.DAY.toString(), strToObj(DateTimeEnum.ERROR.toString()));
+        this.assertReplaceError(DateTimeEnum.STR_TYPE_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        // Date(9999, 12, 31).replace(day=2.0)
+        this.kwargs.clear();
+        this.kwargs.put(DateTimeEnum.DAY.toString(), doubleToObj(2.0));
+        this.assertReplaceError(DateTimeEnum.TYPE_ERR.toString() + doubleToObj(2.0).typeName(),
+            TypeError.class);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        // Date(9999, 12, 31).replace(month=null)
+        this.kwargs.clear();
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), null);
+        this.assertReplaceError(DateTimeEnum.NONE_TYPE_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        // Date(9999, 12, 31).replace(month="str")
+        this.kwargs.clear();
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), strToObj(DateTimeEnum.ERROR.toString()));
+        this.assertReplaceError(DateTimeEnum.STR_TYPE_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        // Date(9999, 12, 31).replace(month=2.0)
+        this.kwargs.clear();
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), doubleToObj(2.0));
+        this.assertReplaceError(DateTimeEnum.TYPE_ERR.toString() + doubleToObj(2.0).typeName(),
+            TypeError.class);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        // Date(9999, 12, 31).replace(year=null)
+        this.kwargs.clear();
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), null);
+        this.assertReplaceError(DateTimeEnum.NONE_TYPE_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        // Date(9999, 12, 31).replace(year="str")
+        this.kwargs.clear();
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), strToObj(DateTimeEnum.ERROR.toString()));
+        this.assertReplaceError(DateTimeEnum.STR_TYPE_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+
+        // Date(9999, 12, 31).replace(year=2.0)
+        this.kwargs.clear();
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), doubleToObj(2.0));
+        this.assertReplaceError(DateTimeEnum.TYPE_ERR.toString() + doubleToObj(2.0).typeName(),
+            TypeError.class);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.maxDay);
+    }
+
+    /**
+     * Test Date().replace() with one arg and one kwarg valid inputs
+     */
+    @Test
+    @DisplayName("Test Date().replace() with one arg and one kwarg valid inputs")
+    public void testDateReplaceOneArgAndOneKwargValidInputs() {
+        // Date(1, 1, 1).replace(9999, day=31)
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxYear)};
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.newDate = this.newDate.replace(this.args, this.kwargs);
+        this.assertAllDate(this.maxYear, this.minDate, this.maxDay);
+
+        // Date(1, 1, 1).replace(9999, month=12)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxYear)};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
+        this.newDate = this.newDate.replace(this.args, this.kwargs);
+        this.assertAllDate(this.maxYear, this.maxMonth, this.minDate);
+
+        // Date(1, 1, 1).replace(12, year=9999)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxMonth)};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.assertReplaceError(DateTimeEnum.REPLACE_YR_ERR.toString(), TypeError.class);
+    }
+
+    /**
+     * Test Date().replace() with one arg and one kwarg invalid inputs
+     */
+    @Test
+    @DisplayName("Test Date().replace() with one arg and one kwarg invalid inputs")
+    public void testDateReplaceOneArgAndOneKwargInvalidInputs() {
+        // Date(1, 1, 1).replace(null, day=31)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{null};
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.assertReplaceError(DateTimeEnum.NONE_TYPE_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace("str", day=31)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{strToObj(DateTimeEnum.ERROR.toString())};
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.assertReplaceError(DateTimeEnum.STR_TYPE_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(9999.0, day=31)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{doubleToObj(9999.0)};
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.assertReplaceError(DateTimeEnum.TYPE_ERR.toString() + doubleToObj(9999.0).typeName(),
+            TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(9999, day=null)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxYear)};
+        this.kwargs.put(DateTimeEnum.DAY.toString(), null);
+        this.assertReplaceError(DateTimeEnum.NONE_TYPE_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(9999, day="str")
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxYear)};
+        this.kwargs.put(DateTimeEnum.DAY.toString(), strToObj(DateTimeEnum.ERROR.toString()));
+        this.assertReplaceError(DateTimeEnum.STR_TYPE_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(9999, day=31.0)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxYear)};
+        this.kwargs.put(DateTimeEnum.DAY.toString(), doubleToObj(31.0));
+        this.assertReplaceError(DateTimeEnum.TYPE_ERR.toString() + doubleToObj(31.0).typeName(),
+            TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(null, month=12)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{null};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
+        this.assertReplaceError(DateTimeEnum.NONE_TYPE_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace("str", month=12)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{strToObj(DateTimeEnum.ERROR.toString())};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
+        this.assertReplaceError(DateTimeEnum.STR_TYPE_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(9999.0, month=12)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{doubleToObj(9999.0)};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
+        this.assertReplaceError(DateTimeEnum.TYPE_ERR.toString() + doubleToObj(9999.0).typeName(),
+            TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(9999, month=null)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxYear)};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), null);
+        this.assertReplaceError(DateTimeEnum.NONE_TYPE_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(9999, month="str")
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxYear)};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), strToObj(DateTimeEnum.ERROR.toString()));
+        this.assertReplaceError(DateTimeEnum.STR_TYPE_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(9999, month=12.0)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxYear)};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), doubleToObj(12.0));
+        this.assertReplaceError(DateTimeEnum.TYPE_ERR.toString() + doubleToObj(12.0).typeName(),
+            TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(null, year=9999)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{null};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.assertReplaceError(DateTimeEnum.NONE_TYPE_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace("str", year=9999)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{strToObj(DateTimeEnum.ERROR.toString())};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.assertReplaceError(DateTimeEnum.STR_TYPE_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(12.0, year=9999)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{doubleToObj(12.0)};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.assertReplaceError(DateTimeEnum.TYPE_ERR.toString() + doubleToObj(12.0).typeName(),
+            TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(12, year=null)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxMonth)};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), null);
+        this.assertReplaceError(DateTimeEnum.REPLACE_YR_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(12, year="str")
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxMonth)};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), strToObj(DateTimeEnum.ERROR.toString()));
+        this.assertReplaceError(DateTimeEnum.REPLACE_YR_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(12, year=9999.0)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxMonth)};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), doubleToObj(9999.0));
+        this.assertReplaceError(DateTimeEnum.REPLACE_YR_ERR.toString(), TypeError.class);
+    }
+
+    /**
+     * Test Date().replace() with one arg and two kwarg invalid inputs
+     */
+    @Test
+    @DisplayName("Test Date().replace() with one arg and two kwarg invalid inputs")
+    public void testDateReplaceOneArgAndTwoKwargInvalidInputs() {
+        // Date(1, 1, 1).replace(9999.0, month=12, day=31)
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.doubleToObj(9999.0)};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.assertReplaceError(DateTimeEnum.TYPE_ERR.toString() + doubleToObj(9999.0).typeName(),
+            TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(9999, month=12.0, day=31)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxYear)};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.doubleToObj(12.0));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.assertReplaceError(DateTimeEnum.TYPE_ERR.toString() + doubleToObj(12.0).typeName(),
+            TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(9999, month=12, day=31.0)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxYear)};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.doubleToObj(31.0));
+        this.assertReplaceError(DateTimeEnum.TYPE_ERR.toString() + doubleToObj(31.0).typeName(),
+            TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(12.0, year=9999, day=31)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.doubleToObj(12.0)};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.assertReplaceError(DateTimeEnum.TYPE_ERR.toString() + doubleToObj(12.0).typeName(),
+            TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(12, year=9999.0, day=31)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxMonth)};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.doubleToObj(9999.0));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.assertReplaceError(DateTimeEnum.REPLACE_YR_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(12, year=9999, day=31.0)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxMonth)};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.doubleToObj(31.0));
+        this.assertReplaceError(DateTimeEnum.TYPE_ERR.toString() + doubleToObj(31.0).typeName(),
+            TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(12, year=9999, day=31)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxMonth)};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.assertReplaceError(DateTimeEnum.REPLACE_YR_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(31.0, year=9999, month=12)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.doubleToObj(31.0)};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
+        this.assertReplaceError(DateTimeEnum.TYPE_ERR.toString() + doubleToObj(31.0).typeName(),
+            TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(31, year=9999.0, month=12)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxDay)};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.doubleToObj(9999.0));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
+        this.assertReplaceError(DateTimeEnum.REPLACE_YR_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(31, year=9999, month=12.0)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxDay)};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.doubleToObj(12.0));
+        this.assertReplaceError(DateTimeEnum.TYPE_ERR.toString() + doubleToObj(12.0).typeName(),
+            TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(31, year=9999, month=12)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxDay)};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
+        this.assertReplaceError(DateTimeEnum.REPLACE_YR_ERR.toString(), TypeError.class);
+    }
+
+    /**
+     * Test Date().replace() with two args and one kwarg invalid inputs
+     */
+    @Test
+    @DisplayName("Test Date().replace() with two arg and one kwarg invalid inputs")
+    public void testDateReplaceTwoArgAndOneKwargInvalidInputs() {
+        // Date(1, 1, 1).replace(9999.0, 12, day=31)
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.doubleToObj(9999.0), this.intToObj(this.maxMonth)};
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.intToObj(this.maxDay));
+        this.assertReplaceError(DateTimeEnum.TYPE_ERR.toString() + doubleToObj(9999.0).typeName(),
+            TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(9999, 12, day=31.0)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxYear), this.intToObj(this.maxMonth)};
+        this.kwargs.put(DateTimeEnum.DAY.toString(), this.doubleToObj(31.0));
+        this.assertReplaceError(DateTimeEnum.TYPE_ERR.toString() + doubleToObj(31.0).typeName(),
+            TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(9999.0, 31, month=12)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.doubleToObj(9999.0), this.intToObj(this.maxDay)};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.intToObj(this.maxMonth));
+        this.assertReplaceError(DateTimeEnum.TYPE_ERR.toString() + doubleToObj(9999.0).typeName(),
+            TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(9999, 31, month=12.0)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxYear), this.intToObj(this.maxDay)};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.doubleToObj(12.0));
+        this.assertReplaceError(DateTimeEnum.REPLACE_MON_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(9999, 31, month=12)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxYear), this.intToObj(this.maxDay)};
+        this.kwargs.put(DateTimeEnum.MONTH.toString(), this.doubleToObj(this.maxMonth));
+        this.assertReplaceError(DateTimeEnum.REPLACE_MON_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(12.0, 31, year=9999)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.doubleToObj(12.0), this.intToObj(this.maxDay)};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.assertReplaceError(DateTimeEnum.TYPE_ERR.toString() + doubleToObj(12.0).typeName(),
+            TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(12, 31, year=9999.0)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxMonth), this.intToObj(this.maxDay)};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.doubleToObj(9999.0));
+        this.assertReplaceError(DateTimeEnum.REPLACE_YR_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        // Date(1, 1, 1).replace(12, 31, year=9999)
+        this.kwargs.clear();
+        this.args = new Object[]{this.intToObj(this.minDate), this.intToObj(this.minDate), this.intToObj(this.minDate)};
+        this.newDate = new Date(this.args, this.kwargs);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
+
+        this.args = new Object[]{this.intToObj(this.maxMonth), this.intToObj(this.maxDay)};
+        this.kwargs.put(DateTimeEnum.YEAR.toString(), this.intToObj(this.maxYear));
+        this.assertReplaceError(DateTimeEnum.REPLACE_YR_ERR.toString(), TypeError.class);
+        this.assertAllDate(this.minDate, this.minDate, this.minDate);
     }
 }
