@@ -2,7 +2,10 @@ package org.python.stdlib.datetime;
 
 import java.util.Collections;
 import java.lang.Comparable;
+import java.lang.Character;
+import java.lang.Math;
 import org.python.types.Str;
+import org.python.types.Int;
 
 public class DateTime extends org.python.types.Object implements Comparable{
     private final int YEAR_INDEX = 0;
@@ -165,6 +168,35 @@ public class DateTime extends org.python.types.Object implements Comparable{
 		org.python.types.Int.getInt(today.getDayOfMonth()), org.python.types.Int.getInt(today.getHour()), org.python.types.Int.getInt(today.getMinute()),
 		org.python.types.Int.getInt(today.getSecond()), org.python.types.Int.getInt(today.getNano() / 1000) };
 	return new DateTime(args, Collections.emptyMap());
+    }
+
+    @org.python.Method(__doc__ = "")
+    public static org.python.Object fromisoformat(org.python.types.Str isoString) {
+        String javaString = (String) isoString.toJava();
+        //{year, month, day}
+        int[] dateList = {0, 0, 0};
+        int multiplyer = 0;
+
+        for (int i = 0; i < javaString.length(); i++) {
+            char c = javaString.charAt(i);
+            if (i < 4) {
+                // i == 0, multiplyer == 1000 : i == 1, multiplyer == 100
+                // i == 2, multiplyer == 10 : i == 3, multiplyer == 1
+                multiplyer = (int) Math.pow(10,3-i);
+                dateList[0] = dateList[0] + (Character.getNumericValue(c)*multiplyer);
+            } else if (i > 4 && i < 7) {
+                // i == 5, multiplyer == 10 : i == 6, multiplyer == 1
+                multiplyer = (int) Math.pow(10,6-i);
+                dateList[1] = dateList[1] + (Character.getNumericValue(c)*multiplyer);
+            } else if (i > 7 && i < 10) {
+                // i == 8, multiplyer == 10 : i == 9, multiplyer == 1
+                multiplyer = (int) Math.pow(10,9-i);
+                dateList[2] = dateList[2] + (Character.getNumericValue(c)*multiplyer);
+            }
+
+        }
+        org.python.Object[] args = {Int.getInt(dateList[0]), Int.getInt(dateList[1]), Int.getInt(dateList[2])};
+        return new DateTime(args, Collections.emptyMap());
     }
 
 
