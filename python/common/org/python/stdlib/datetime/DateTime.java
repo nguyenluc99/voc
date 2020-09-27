@@ -214,15 +214,27 @@ public class DateTime extends org.python.types.Object {
 
     @org.python.Method(__doc__ = "")
     public org.python.Object weekday() {
-	double y = ((org.python.types.Int) this.year).value;
-	double m = ((org.python.types.Int) this.month).value;
-	double d = ((org.python.types.Int) this.day).value;
+	//Maybe break this out to a function/method
+	org.python.types.Str y_py = (org.python.types.Str) this.year;
+	String y_str = (String) y_py.toJava();
+	double y = Double.parseDouble(y_str);
+
+	org.python.types.Str m_py = (org.python.types.Str) this.year;
+	String m_str = (String) m_py.toJava();
+	double m = Double.parseDouble(m_str);
+
+	org.python.types.Str d_py = (org.python.types.Str) this.year;
+	String d_str = (String) d_py.toJava();
+	double d = Double.parseDouble(m_str);
+	//String y = ((org.python.types.Str) this.year).toJava();
+	//double m = ((org.python.types.Int) this.month).value;
+	//double d = ((org.python.types.Int) this.day).value;
 
 	java.util.Date myCalendar = new java.util.GregorianCalendar((int) y, (int) m - 1, (int) d).getTime();
 	java.util.Calendar c = java.util.Calendar.getInstance();
 	c.setTime(myCalendar);
 	int day = c.get(java.util.Calendar.DAY_OF_WEEK);
-	int[] convertToPython = { 6, 0, 1, 2, 3, 4, 5 };
+	int[] convertToPython = { 1, 2, 3, 4, 5, 6, 0 };
 	return org.python.types.Int.getInt(convertToPython[day - 1]);
 
     }

@@ -3,7 +3,6 @@ import java.util.Collections;
 import org.python.stdlib.datetime.DateTime;
 import org.python.types.Int;
 import org.python.types.Str;
-
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
@@ -44,7 +43,34 @@ public class DateTimeTests {
         String java_date_full = (String) python_date_yymmdd.__str__().toJava();
         assertEquals(new Str(dtf.format(now)), new Str(java_date_full));
     }
+    //Maybe these should be removed
+    @Test
+    public void test___year__() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy");
+        LocalDateTime now = LocalDateTime.now(); 
+
+        
+        DateTime python_date_full = (DateTime) DateTime.today();
+        org.python.Object python_date_yy = python_date_full.__year__();
+        String java_date_full = (String) python_date_yy.__str__().toJava();
+        assertEquals(new Str(dtf.format(now)), new Str(java_date_full));
+    }
 
 
-    
+    //______________
+    @Test
+    public void test_weekday() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("M");
+        LocalDateTime now = LocalDateTime.now(); 
+
+        
+        DateTime python_date_full = (DateTime) DateTime.today();
+        //org.python.Object python_date_mm = python_date_full.weekday();
+        //String java_date_full = (String) python_date_mm.__str__().toJava();
+        //org.python.Object week = (org.python.types.Object) python_date_full.weekday();
+        long number = 32;
+        assertEquals(python_date_full.weekday().toJava(), number);
+    }
+    //______________
+
 }
