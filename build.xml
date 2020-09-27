@@ -39,18 +39,11 @@
     <ant antfile="build-java.xml" target="dist-testdaemon"/>
   </target>
 
-  <target name="android">
-    <ant antfile="build-android.xml" target="dist"/>
-  </target>
+    <target name="java-test">
+        <ant antfile="build-java.xml" target="test"/>
+    </target>
 
-  <target name="all" depends="java, android" />
-
-  <target name="upload" depends="java, android" description="Upload assets to S3">
-    <exec executable="python">
-      <arg value="tools/upload.py"/>
-      <arg value="b${release}"/>
-    </exec>
-  </target>
+  <target name="all" depends="java" />
 
   <target name="clean" description="Clean up">
     <delete dir="${build}"/>

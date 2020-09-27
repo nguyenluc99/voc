@@ -1,6 +1,7 @@
 package org.python.stdlib.datetime;
 
 import java.util.Collections;
+import org.python.types.Str;
 
 public class DateTime extends org.python.types.Object {
     private final int YEAR_INDEX = 0;
@@ -12,7 +13,7 @@ public class DateTime extends org.python.types.Object {
     private final int MICROSECOND_INDEX = 6;
 
     private final int MIN_YEAR = 1;
-    private final int MAX_YEAR = 999;
+    private final int MAX_YEAR = 9999;
 
     private Long[] timeUnits = { 0l, 0l, 0l, 0l, 0l, 0l, 0l };
 
@@ -72,6 +73,7 @@ public class DateTime extends org.python.types.Object {
 	if (this.timeUnits[MONTH_INDEX] < 1 || this.timeUnits[MONTH_INDEX] > 12) {
 	    throw new org.python.exceptions.ValueError("month " + this.timeUnits[MONTH_INDEX] + "is out of range");
 	}
+
 	if (this.timeUnits[DAY_INDEX] < 1 || this.timeUnits[DAY_INDEX] > 31) {
 	    throw new org.python.exceptions.ValueError("day " + this.timeUnits[DAY_INDEX] + "is out of range");
 	}
@@ -88,7 +90,7 @@ public class DateTime extends org.python.types.Object {
 	    throw new org.python.exceptions.ValueError("second " + this.timeUnits[SECOND_INDEX] + "is out of range");
 	}
 
-	if (this.timeUnits[MICROSECOND_INDEX] < 0 || this.timeUnits[MICROSECOND_INDEX] > 100000) {
+	if (this.timeUnits[MICROSECOND_INDEX] < 0 || this.timeUnits[MICROSECOND_INDEX] > 999999) {
 	    throw new org.python.exceptions.ValueError("microsecond " + this.timeUnits[MICROSECOND_INDEX] + "is out of range");
 	}
 
@@ -141,7 +143,8 @@ public class DateTime extends org.python.types.Object {
 	org.python.Object[] args = { org.python.types.Int.getInt(this.timeUnits[YEAR_INDEX]), org.python.types.Int.getInt(this.timeUnits[MONTH_INDEX]),
 		org.python.types.Int.getInt(this.timeUnits[DAY_INDEX]) };
 	return new Date(args, Collections.emptyMap());
-    }
+	}
+	
 
     @org.python.Method(__doc__ = "")
     public static org.python.Object today() {
@@ -151,6 +154,8 @@ public class DateTime extends org.python.types.Object {
 		org.python.types.Int.getInt(today.getSecond()), org.python.types.Int.getInt(today.getNano() / 1000) };
 	return new DateTime(args, Collections.emptyMap());
     }
+
+
 
     @org.python.Method(__doc__ = "returns year")
     public org.python.types.Str __year__() {
@@ -213,16 +218,92 @@ public class DateTime extends org.python.types.Object {
 
     @org.python.Method(__doc__ = "")
     public org.python.Object weekday() {
-	double y = ((org.python.types.Int) this.year).value;
-	double m = ((org.python.types.Int) this.month).value;
-	double d = ((org.python.types.Int) this.day).value;
+	//Maybe break this out to a function/method
+	org.python.types.Str y_py = (org.python.types.Str) this.year;
+	String y_str = (String) y_py.toJava();
+	double y = Double.parseDouble(y_str);
 
-	java.util.Date myCalendar = new java.util.GregorianCalendar((int) y, (int) m - 1, (int) d).getTime();
+	org.python.types.Str m_py = (org.python.types.Str) this.year;
+	String m_str = (String) m_py.toJava();
+	double m = Double.parseDouble(m_str);
+
+	org.python.types.Str d_py = (org.python.types.Str) this.year;
+	String d_str = (String) d_py.toJava();
+	double d = Double.parseDouble(m_str);
+	//String y = ((org.python.types.Str) this.year).toJava();
+	//double m = ((org.python.types.Int) this.month).value;
+	//double d = ((org.python.types.Int) this.day).value;
+
+	java.util.Date myCalendar = new java.util.GregorianCalendar((int) y, (int) m , (int) d).getTime();
 	java.util.Calendar c = java.util.Calendar.getInstance();
 	c.setTime(myCalendar);
 	int day = c.get(java.util.Calendar.DAY_OF_WEEK);
 	int[] convertToPython = { 6, 0, 1, 2, 3, 4, 5 };
 	return org.python.types.Int.getInt(convertToPython[day - 1]);
+
+	}
+	
+	@org.python.Method(__doc__ = "")
+    public org.python.Object isoformat(org.python.Object separatorArg) {
+	String separator;
+	switch(separatorArg.typeName()) {
+		case "str":
+			org.python.types.Str t = (org.python.types.Str) separatorArg;
+			separator = (String) t.toJava();
+			break;
+		default:
+			throw new org.python.exceptions.TypeError("isoformat() argument 1 must be a unicode character, not " + separatorArg.typeName());
+	}
+
+	//Maybe break this out to a function/method
+	org.python.types.Str y_py = (org.python.types.Str) this.year;
+	String y_str = (String) y_py.toJava();
+
+	org.python.types.Str m_py = (org.python.types.Str) this.month;
+	String m_str = (String) m_py.toJava();
+	if (m_str.length() == 1){
+		m_str = "0" + m_str;
+	}
+
+	org.python.types.Str d_py = (org.python.types.Str) this.day;
+	String d_str = (String) d_py.toJava();
+	if (d_str.length() == 1){
+		d_str = "0" + d_str;
+	}
+
+	org.python.types.Str h_py = (org.python.types.Str) this.hour;
+	String h_str = (String) h_py.toJava();
+	if (h_str.length() == 1){
+		h_str = "0" + h_str;
+	}
+	
+	org.python.types.Str min_py = (org.python.types.Str) this.minute;
+	String min_str = (String) min_py.toJava();
+	if (min_str.length() == 1){
+		min_str = "0" + min_str;
+	}
+
+	org.python.types.Str s_py = (org.python.types.Str) this.second;
+	String s_str = (String) s_py.toJava();
+	if (s_str.length() == 1){
+		s_str = "0" + s_str;
+	}
+
+	org.python.types.Str mic_py = (org.python.types.Str) this.microsecond;
+	String mic_str = (String) mic_py.toJava();
+	
+
+	String iso_time;
+	if (mic_str == "0") {
+		iso_time = y_str + "-" + m_str + "-" + d_str + separator + h_str + ":" +  min_str + ":" + s_str;
+	} else {
+		iso_time =  y_str + "-" + m_str + "-" + d_str  + separator + h_str + ":" +  min_str + ":" + s_str + "." + mic_str;
+	}
+	return new Str(iso_time);
+	//String y = ((org.python.types.Str) this.year).toJava();
+	//double m = ((org.python.types.Int) this.month).value;
+	//double d = ((org.python.types.Int) this.day).value;
+
 
     }
 }
