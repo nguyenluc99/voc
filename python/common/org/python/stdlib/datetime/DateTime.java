@@ -176,7 +176,6 @@ public class DateTime extends org.python.types.Object implements Comparable{
         switch(isoString.typeName()) {
             case "str":
                 org.python.types.Str t = (org.python.types.Str) isoString;
-                separator = (String) t.toJava();
                 break;
             default:
                 throw new org.python.exceptions.TypeError("isoformat() argument 1 must be a unicode character, not " + isoString.typeName());
