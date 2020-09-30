@@ -290,18 +290,19 @@ public class DateTimeTests {
 
     @Test
     public void test_today() {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SS");
+        //This methods return value is only dependent on the current day so one test is enough. 
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now(); 
 
 
         org.python.Object python_date_full = DateTime.today();
         String java_date_full = (String) python_date_full.__str__().toJava();
-        String java_date_reduced = java_date_full.substring(0,java_date_full.length()-4);
-        assertEquals(new Str(dtf.format(now)),new Str(java_date_reduced) );
+        String java_date_reduced = java_date_full.substring(0,java_date_full.length()-7);
+        assertEquals(new Str(java_date_reduced), new Str(dtf.format(now)));
     }
 
     @Test
-    public void test_date() {
+    public void test_date_now() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime now = LocalDateTime.now(); 
 
@@ -311,16 +312,389 @@ public class DateTimeTests {
         String java_date_full = (String) python_date_yymmdd.__str__().toJava();
         assertEquals(new Str(dtf.format(now)), new Str(java_date_full));
     }
+    @Test
+    public void test_date_min(){
+        int year = 1;
+        int month = 1;
+        int day = 1;
+        int hours = 0;
+        int minutes = 0;
+        int sec = 0;
+        int millisec = 0;
+        Int[] args = {Int.getInt(year), Int.getInt(month), Int.getInt(day)};
+        DateTime python_date_full = new DateTime(args, Collections.emptyMap());
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime aDate = LocalDateTime.of(
+            year,
+            month,
+            day,
+            hours,
+            minutes,
+            sec,
+            millisec
+        );
+
+        org.python.Object python_date_yymmdd = python_date_full.date();
+        String java_date_full = (String) python_date_yymmdd.__str__().toJava();
+        assertEquals(new Str(dtf.format(aDate)), new Str(java_date_full));
+    }
 
     @Test
-    public void test_weekday() {
+    public void test_date_max_june(){
+        int year = 9999;
+        int month = 5;
+        int day = 30;
+        int hours = 0;
+        int minutes = 0;
+        int sec = 0;
+        int millisec = 0;
+        Int[] args = {Int.getInt(year), Int.getInt(month), Int.getInt(day)};
+        DateTime python_date_full = new DateTime(args, Collections.emptyMap());
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime aDate = LocalDateTime.of(
+            year,
+            month,
+            day,
+            hours,
+            minutes,
+            sec,
+            millisec
+        );
+
+        org.python.Object python_date_yymmdd = python_date_full.date();
+        String java_date_full = (String) python_date_yymmdd.__str__().toJava();
+        assertEquals(new Str(dtf.format(aDate)), new Str(java_date_full));
+    }
+
+    @Test
+    public void test_weekday_now() {
 
         DateTime python_date_full = (DateTime) DateTime.today();
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK);
         int[] convertToPython = { 6, 0, 1, 2, 3, 4, 5 };
         long week_day = convertToPython[day-1]; 
-        assertEquals(python_date_full.weekday().toJava(), week_day);
+        assertEquals(week_day, python_date_full.weekday().toJava());
+    }
+
+    @Test
+    public void test_weekday_monday(){
+        int year = 2020;
+        int month = 9;
+        int day = 7;
+        int hours = 0;
+        int minutes = 0;
+        int sec = 0;
+        int millisec = 0;
+        Int[] args = {Int.getInt(year), Int.getInt(month), Int.getInt(day)};
+        DateTime python_date_full = new DateTime(args, Collections.emptyMap());
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month - 1, day);
+        int dayJ = calendar.get(Calendar.DAY_OF_WEEK);
+        
+        int[] convertToPython = { 6, 0, 1, 2, 3, 4, 5 };
+        long week_day = convertToPython[(dayJ-1)];
+        
+        assertEquals(week_day, python_date_full.weekday().toJava());
+    }
+
+    @Test
+    public void test_weekday_sunday(){
+        int year = 2020;
+        int month = 9;
+        int day = 13;
+        int hours = 0;
+        int minutes = 0;
+        int sec = 0;
+        int millisec = 0;
+        Int[] args = {Int.getInt(year), Int.getInt(month), Int.getInt(day)};
+        DateTime python_date_full = new DateTime(args, Collections.emptyMap());
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month - 1, day);
+        int dayJ = calendar.get(Calendar.DAY_OF_WEEK);
+        
+        int[] convertToPython = { 6, 0, 1, 2, 3, 4, 5 };
+        long week_day = convertToPython[(dayJ-1)];
+        
+        assertEquals(week_day, python_date_full.weekday().toJava());
+    }
+
+    @Test
+    public void test_weekday_wednsday(){
+        int year = 2020;
+        int month = 9;
+        int day = 9;
+        int hours = 0;
+        int minutes = 0;
+        int sec = 0;
+        int millisec = 0;
+        Int[] args = {Int.getInt(year), Int.getInt(month), Int.getInt(day)};
+        DateTime python_date_full = new DateTime(args, Collections.emptyMap());
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month - 1, day);
+        int dayJ = calendar.get(Calendar.DAY_OF_WEEK);
+        
+        int[] convertToPython = { 6, 0, 1, 2, 3, 4, 5 };
+        long week_day = convertToPython[(dayJ-1)];
+        
+        assertEquals(week_day, python_date_full.weekday().toJava());
+    }
+
+    @Test 
+    public void test_isoformat_no_milli() {
+        int year = 2020;
+        int month = 9;
+        int day = 9;
+        int hours = 0;
+        int minutes = 0;
+        int sec = 0;
+        int millisec = 0;
+        Int[] args = {Int.getInt(year), Int.getInt(month), Int.getInt(day)};
+        DateTime python_date_full = new DateTime(args, Collections.emptyMap());
+        
+        String separator = "T";
+        org.python.types.Str python_separator = (org.python.types.Str) new Str(separator);
+        
+        DateTimeFormatter dtf1 = DateTimeFormatter.ofPattern("YYYY-MM-dd");
+        DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("HH:mm:ss");
+        LocalDateTime aDate = LocalDateTime.of(
+            year,
+            month,
+            day,
+            hours,
+            minutes,
+            sec,
+            millisec
+        );
+
+
+        org.python.Object python_iso = python_date_full.isoformat(python_separator);
+        String java_time_full = (String) python_iso.__str__().toJava();
+        String java_iso_reduced = java_time_full.substring(0,java_time_full.length());
+        assertEquals(new Str(dtf1.format(aDate) + separator + dtf2.format(aDate)), new Str(java_iso_reduced));
+    }
+
+    @Test 
+    public void test_isoformat_1_milli() {
+        int year = 2020;
+        int month = 9;
+        int day = 9;
+        int hours = 0;
+        int minutes = 0;
+        int sec = 10;
+        int millisec = 1;
+        int millisecInNanosec = millisec * 1000;
+        
+        Int[] args = {Int.getInt(year), Int.getInt(month), Int.getInt(day),Int.getInt(hours), Int.getInt(minutes), Int.getInt(sec),Int.getInt(millisec)};
+        DateTime python_date_full = new DateTime(args, Collections.emptyMap());
+        
+        String separator = "T";
+        org.python.types.Str python_separator = (org.python.types.Str) new Str(separator);
+        
+        DateTimeFormatter dtf1 = DateTimeFormatter.ofPattern("YYYY-MM-dd");
+        DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("HH:mm:ss.SSSSSS");
+        LocalDateTime aDate = LocalDateTime.of(
+            year,
+            month,
+            day,
+            hours,
+            minutes,
+            sec,
+            millisecInNanosec
+        );
+
+
+        org.python.Object python_iso = python_date_full.isoformat(python_separator);
+        String java_time_full = (String) python_iso.__str__().toJava();
+        String java_iso_reduced = java_time_full.substring(0,java_time_full.length());
+        assertEquals(new Str(dtf1.format(aDate) + separator + dtf2.format(aDate)), new Str(java_iso_reduced));
+    }
+
+    @Test 
+    public void test_isoformat_2_milli() {
+        int year = 2020;
+        int month = 9;
+        int day = 9;
+        int hours = 0;
+        int minutes = 0;
+        int sec = 10;
+        int millisec = 11;
+        int millisecInNanosec = millisec * 1000;
+        
+        Int[] args = {Int.getInt(year), Int.getInt(month), Int.getInt(day),Int.getInt(hours), Int.getInt(minutes), Int.getInt(sec),Int.getInt(millisec)};
+        DateTime python_date_full = new DateTime(args, Collections.emptyMap());
+        
+        String separator = "T";
+        org.python.types.Str python_separator = (org.python.types.Str) new Str(separator);
+        
+        DateTimeFormatter dtf1 = DateTimeFormatter.ofPattern("YYYY-MM-dd");
+        DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("HH:mm:ss.SSSSSS");
+        LocalDateTime aDate = LocalDateTime.of(
+            year,
+            month,
+            day,
+            hours,
+            minutes,
+            sec,
+            millisecInNanosec
+        );
+
+
+        org.python.Object python_iso = python_date_full.isoformat(python_separator);
+        String java_time_full = (String) python_iso.__str__().toJava();
+        String java_iso_reduced = java_time_full.substring(0,java_time_full.length());
+        assertEquals(new Str(dtf1.format(aDate) + separator + dtf2.format(aDate)), new Str(java_iso_reduced));
+    }
+
+    @Test 
+    public void test_isoformat_3_milli() {
+        int year = 2020;
+        int month = 9;
+        int day = 9;
+        int hours = 0;
+        int minutes = 0;
+        int sec = 10;
+        int millisec = 111;
+        int millisecInNanosec = millisec * 1000;
+        
+        Int[] args = {Int.getInt(year), Int.getInt(month), Int.getInt(day),Int.getInt(hours), Int.getInt(minutes), Int.getInt(sec),Int.getInt(millisec)};
+        DateTime python_date_full = new DateTime(args, Collections.emptyMap());
+        
+        String separator = "T";
+        org.python.types.Str python_separator = (org.python.types.Str) new Str(separator);
+        
+        DateTimeFormatter dtf1 = DateTimeFormatter.ofPattern("YYYY-MM-dd");
+        DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("HH:mm:ss.SSSSSS");
+        LocalDateTime aDate = LocalDateTime.of(
+            year,
+            month,
+            day,
+            hours,
+            minutes,
+            sec,
+            millisecInNanosec
+        );
+
+
+        org.python.Object python_iso = python_date_full.isoformat(python_separator);
+        String java_time_full = (String) python_iso.__str__().toJava();
+        String java_iso_reduced = java_time_full.substring(0,java_time_full.length());
+        assertEquals(new Str(dtf1.format(aDate) + separator + dtf2.format(aDate)), new Str(java_iso_reduced));
+    }
+
+    @Test 
+    public void test_isoformat_4_milli() {
+        int year = 2020;
+        int month = 9;
+        int day = 9;
+        int hours = 0;
+        int minutes = 0;
+        int sec = 10;
+        int millisec = 1111;
+        int millisecInNanosec = millisec * 1000;
+        
+        Int[] args = {Int.getInt(year), Int.getInt(month), Int.getInt(day),Int.getInt(hours), Int.getInt(minutes), Int.getInt(sec),Int.getInt(millisec)};
+        DateTime python_date_full = new DateTime(args, Collections.emptyMap());
+        
+        String separator = "T";
+        org.python.types.Str python_separator = (org.python.types.Str) new Str(separator);
+        
+        DateTimeFormatter dtf1 = DateTimeFormatter.ofPattern("YYYY-MM-dd");
+        DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("HH:mm:ss.SSSSSS");
+        LocalDateTime aDate = LocalDateTime.of(
+            year,
+            month,
+            day,
+            hours,
+            minutes,
+            sec,
+            millisecInNanosec
+        );
+
+        
+
+
+        org.python.Object python_iso = python_date_full.isoformat(python_separator);
+        String java_time_full = (String) python_iso.__str__().toJava();
+        String java_iso_reduced = java_time_full.substring(0,java_time_full.length());
+        assertEquals(new Str(dtf1.format(aDate) + separator + dtf2.format(aDate)), new Str(java_iso_reduced));
+    }
+
+    @Test 
+    public void test_isoformat_5_milli() {
+        int year = 2020;
+        int month = 9;
+        int day = 9;
+        int hours = 0;
+        int minutes = 0;
+        int sec = 10;
+        int millisec = 11111;
+        int millisecInNanosec = millisec * 1000;
+        
+        Int[] args = {Int.getInt(year), Int.getInt(month), Int.getInt(day),Int.getInt(hours), Int.getInt(minutes), Int.getInt(sec),Int.getInt(millisec)};
+        DateTime python_date_full = new DateTime(args, Collections.emptyMap());
+        
+        String separator = "T";
+        org.python.types.Str python_separator = (org.python.types.Str) new Str(separator);
+        
+        DateTimeFormatter dtf1 = DateTimeFormatter.ofPattern("YYYY-MM-dd");
+        DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("HH:mm:ss.SSSSSS");
+        LocalDateTime aDate = LocalDateTime.of(
+            year,
+            month,
+            day,
+            hours,
+            minutes,
+            sec,
+            millisecInNanosec
+        );
+
+
+        org.python.Object python_iso = python_date_full.isoformat(python_separator);
+        String java_time_full = (String) python_iso.__str__().toJava();
+        String java_iso_reduced = java_time_full.substring(0,java_time_full.length());
+        assertEquals(new Str(dtf1.format(aDate) + separator + dtf2.format(aDate)), new Str(java_iso_reduced));
+    }
+
+    @Test 
+    public void test_isoformat_6_milli() {
+        int year = 2020;
+        int month = 9;
+        int day = 9;
+        int hours = 0;
+        int minutes = 0;
+        int sec = 10;
+        int millisec = 111111;
+        int millisecInNanosec = millisec * 1000;
+        
+        Int[] args = {Int.getInt(year), Int.getInt(month), Int.getInt(day),Int.getInt(hours), Int.getInt(minutes), Int.getInt(sec),Int.getInt(millisec)};
+        DateTime python_date_full = new DateTime(args, Collections.emptyMap());
+        
+        String separator = "T";
+        org.python.types.Str python_separator = (org.python.types.Str) new Str(separator);
+        
+        DateTimeFormatter dtf1 = DateTimeFormatter.ofPattern("YYYY-MM-dd");
+        DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("HH:mm:ss.SSSSSS");
+        LocalDateTime aDate = LocalDateTime.of(
+            year,
+            month,
+            day,
+            hours,
+            minutes,
+            sec,
+            millisecInNanosec
+        );
+
+
+        org.python.Object python_iso = python_date_full.isoformat(python_separator);
+        String java_time_full = (String) python_iso.__str__().toJava();
+        String java_iso_reduced = java_time_full.substring(0,java_time_full.length());
+        assertEquals(new Str(dtf1.format(aDate) + separator + dtf2.format(aDate)), new Str(java_iso_reduced));
     }
 
     @Test 

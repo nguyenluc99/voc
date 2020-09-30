@@ -143,8 +143,11 @@ public class DateTime extends org.python.types.Object{
 
     @org.python.Method(__doc__ = "")
         public org.python.Object date() {
-        org.python.Object[] args = { org.python.types.Int.getInt(this.timeUnits[YEAR_INDEX]), org.python.types.Int.getInt(this.timeUnits[MONTH_INDEX]),
-            org.python.types.Int.getInt(this.timeUnits[DAY_INDEX]) };
+        org.python.Object[] args = { 
+			org.python.types.Int.getInt(this.timeUnits[YEAR_INDEX]), 
+			org.python.types.Int.getInt(this.timeUnits[MONTH_INDEX]),
+			org.python.types.Int.getInt(this.timeUnits[DAY_INDEX]) 
+		};
         return new Date(args, Collections.emptyMap());
 	}
 	
@@ -152,9 +155,15 @@ public class DateTime extends org.python.types.Object{
     @org.python.Method(__doc__ = "")
     public static org.python.Object today() {
         java.time.LocalDateTime today = java.time.LocalDateTime.now();
-        org.python.Object[] args = { org.python.types.Int.getInt(today.getYear()), org.python.types.Int.getInt(today.getMonth().getValue()),
-            org.python.types.Int.getInt(today.getDayOfMonth()), org.python.types.Int.getInt(today.getHour()), org.python.types.Int.getInt(today.getMinute()),
-            org.python.types.Int.getInt(today.getSecond()), org.python.types.Int.getInt(today.getNano() / 1000) };
+		org.python.Object[] args = { 
+			org.python.types.Int.getInt(today.getYear()),
+			org.python.types.Int.getInt(today.getMonth().getValue()),
+			org.python.types.Int.getInt(today.getDayOfMonth()),
+			org.python.types.Int.getInt(today.getHour()),
+			org.python.types.Int.getInt(today.getMinute()),
+			org.python.types.Int.getInt(today.getSecond()),
+			org.python.types.Int.getInt(today.getNano() / 1000) 
+		};
         return new DateTime(args, Collections.emptyMap());
     }
 
@@ -427,17 +436,16 @@ public class DateTime extends org.python.types.Object{
         String y_str = (String) y_py.toJava();
         double y = Double.parseDouble(y_str);
 
-        org.python.types.Str m_py = (org.python.types.Str) this.year;
+        org.python.types.Str m_py = (org.python.types.Str) this.month;
         String m_str = (String) m_py.toJava();
         double m = Double.parseDouble(m_str);
 
-        org.python.types.Str d_py = (org.python.types.Str) this.year;
+        org.python.types.Str d_py = (org.python.types.Str) this.day;
         String d_str = (String) d_py.toJava();
-        double d = Double.parseDouble(m_str);
-
-        java.util.Date myCalendar = new java.util.GregorianCalendar((int) y, (int) m , (int) d).getTime();
+        double d = Double.parseDouble(d_str);
+	
         java.util.Calendar c = java.util.Calendar.getInstance();
-        c.setTime(myCalendar);
+        c.set((int) y, (int) m - 1, (int) d, 0, 0);
         int day = c.get(java.util.Calendar.DAY_OF_WEEK);
         int[] convertToPython = { 6, 0, 1, 2, 3, 4, 5 };
         return org.python.types.Int.getInt(convertToPython[day - 1]);
@@ -491,10 +499,13 @@ public class DateTime extends org.python.types.Object{
         }
 
         org.python.types.Str mic_py = (org.python.types.Str) this.microsecond;
-        String mic_str = (String) mic_py.toJava();
+		String mic_str = (String) mic_py.toJava();
+		while(mic_str.length() < 6){
+			mic_str = "0" + mic_str;
+		}
 
         String iso_time;
-        if (mic_str == "0") {
+        if (mic_str.equals("000000")) {
             iso_time = y_str + "-" + m_str + "-" + d_str + separator + h_str + ":" +  min_str + ":" + s_str;
         } else {
             iso_time =  y_str + "-" + m_str + "-" + d_str  + separator + h_str + ":" +  min_str + ":" + s_str + "." + mic_str;
