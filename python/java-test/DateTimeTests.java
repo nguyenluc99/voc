@@ -6,8 +6,11 @@ import java.util.Arrays;
 import org.python.stdlib.datetime.DateTime;
 import org.python.types.Int;
 import org.python.types.Str;
+import org.python.exceptions.ValueError;
+import org.python.exceptions.SyntaxError;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import java.util.Calendar;
 import java.time.format.DateTimeFormatter;  
 import java.time.LocalDateTime;    
@@ -79,6 +82,40 @@ public class DateTimeTests {
         args[6] = Int.getInt(999999);
         date = new DateTime(args, Collections.emptyMap());
         assertEquals(date.__str__(), new Str("9999-12-31 23:59:59.999999"));
+
+        args[0] = Int.getInt(99999);
+        Int[] finalArgs = args;
+        assertThrows(ValueError.class, () -> new DateTime(finalArgs, Collections.emptyMap()));
+
+        args[0] = Int.getInt(9999);
+        args[1] = Int.getInt(13);
+        Int[] finalArgs1 = args;
+        assertThrows(ValueError.class, () -> new DateTime(finalArgs1, Collections.emptyMap()));
+
+        args[1] = Int.getInt(12);
+        args[2] = Int.getInt(32);
+        Int[] finalArgs2 = args;
+        assertThrows(ValueError.class, () -> new DateTime(finalArgs2, Collections.emptyMap()));
+
+        args[2] = Int.getInt(31);
+        args[3] = Int.getInt(25);
+        Int[] finalArgs3 = args;
+        assertThrows(ValueError.class, () -> new DateTime(finalArgs3, Collections.emptyMap()));
+
+        args[3] = Int.getInt(24);
+        args[4] = Int.getInt(60);
+        Int[] finalArgs4 = args;
+        assertThrows(ValueError.class, () -> new DateTime(finalArgs4, Collections.emptyMap()));
+
+        args[4] = Int.getInt(59);
+        args[5] = Int.getInt(60);
+        Int[] finalArgs5 = args;
+        assertThrows(ValueError.class, () -> new DateTime(finalArgs5, Collections.emptyMap()));
+
+        args[5] = Int.getInt(59);
+        args[6] = Int.getInt(9999999);
+        Int[] finalArgs6 = args;
+        assertThrows(ValueError.class, () -> new DateTime(finalArgs6, Collections.emptyMap()));
     }
 
     @Test

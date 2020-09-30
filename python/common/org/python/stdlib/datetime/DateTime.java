@@ -82,31 +82,31 @@ public class DateTime extends org.python.types.Object implements Comparable{
         }
 
         if (this.timeUnits[YEAR_INDEX] < MIN_YEAR || this.timeUnits[YEAR_INDEX] > MAX_YEAR) {
-            throw new org.python.exceptions.ValueError("year " + this.timeUnits[YEAR_INDEX] + "is out of range");
+            throw new org.python.exceptions.ValueError("year " + this.timeUnits[YEAR_INDEX] + " is out of range");
         }
 
         if (this.timeUnits[MONTH_INDEX] < 1 || this.timeUnits[MONTH_INDEX] > 12) {
-            throw new org.python.exceptions.ValueError("month " + this.timeUnits[MONTH_INDEX] + "is out of range");
+            throw new org.python.exceptions.ValueError("month must be in 1..12");
         }
 
         if (this.timeUnits[DAY_INDEX] < 1 || this.timeUnits[DAY_INDEX] > 31) {
-            throw new org.python.exceptions.ValueError("day " + this.timeUnits[DAY_INDEX] + "is out of range");
+            throw new org.python.exceptions.ValueError("day " + this.timeUnits[DAY_INDEX] + " is out of range");
         }
 
         if (this.timeUnits[HOUR_INDEX] < 0 || this.timeUnits[HOUR_INDEX] > 24) {
-            throw new org.python.exceptions.ValueError("hour " + this.timeUnits[HOUR_INDEX] + "is out of range");
+            throw new org.python.exceptions.ValueError("hour " + this.timeUnits[HOUR_INDEX] + " is out of range");
         }
 
-        if (this.timeUnits[MINUTE_INDEX] < 0 || this.timeUnits[MINUTE_INDEX] > 60) {
-            throw new org.python.exceptions.ValueError("minute " + this.timeUnits[MINUTE_INDEX] + "is out of range");
+        if (this.timeUnits[MINUTE_INDEX] < 0 || this.timeUnits[MINUTE_INDEX] > 59) {
+            throw new org.python.exceptions.ValueError("minute " + this.timeUnits[MINUTE_INDEX] + " is out of range");
         }
 
-        if (this.timeUnits[SECOND_INDEX] < 0 || this.timeUnits[SECOND_INDEX] > 60) {
-            throw new org.python.exceptions.ValueError("second " + this.timeUnits[SECOND_INDEX] + "is out of range");
+        if (this.timeUnits[SECOND_INDEX] < 0 || this.timeUnits[SECOND_INDEX] > 59) {
+            throw new org.python.exceptions.ValueError("second " + this.timeUnits[SECOND_INDEX] + " is out of range");
         }
 
         if (this.timeUnits[MICROSECOND_INDEX] < 0 || this.timeUnits[MICROSECOND_INDEX] > 999999) {
-            throw new org.python.exceptions.ValueError("microsecond " + this.timeUnits[MICROSECOND_INDEX] + "is out of range");
+            throw new org.python.exceptions.ValueError("microsecond " + this.timeUnits[MICROSECOND_INDEX] + " is out of range");
         }
 
         this.year = __year__();

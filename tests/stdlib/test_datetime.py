@@ -1,5 +1,3 @@
-from unittest import expectedFailure
-
 from ..utils import TranspileTestCase
 
 
@@ -10,10 +8,9 @@ class DateTests(TranspileTestCase):
             from datetime import date
             print(date(14, 10, day=11))
             print(date(14, 10, 11))
-            print(date(14, month=10, day=11))            
+            print(date(14, month=10, day=11))
             print(date(year=14, month=10, day=11))
             print(date(1,1,1))
-       
         """)
 
     def test_year_too_large(self):
@@ -23,7 +20,6 @@ class DateTests(TranspileTestCase):
             date(14444, 10, 11)
         except ValueError as err:
             print(err)
-        
         """)
 
     def test_month_too_large(self):
@@ -33,7 +29,6 @@ class DateTests(TranspileTestCase):
             date(14, 122, 11)
         except ValueError as err:
             print(err)
-        
         """)
 
     def test_one_arg_no_month(self):
@@ -43,17 +38,6 @@ class DateTests(TranspileTestCase):
                 date(year=14)
             except TypeError as err:
                 print(err)
-            
-            """)
-
-    def test_one_arg_no_month(self):
-        self.assertCodeExecution("""
-            from datetime import date
-            try:
-                date(year=14)
-            except TypeError as err:
-                print(err)
-            
             """)
 
     def test_one_arg_year_float(self):
@@ -80,7 +64,7 @@ class DateTests(TranspileTestCase):
         try:
             date(day=71)
         except TypeError as err:
-            print(err)        
+            print(err)
         """)
 
     def test_no_arg(self):
@@ -100,40 +84,31 @@ class DateTests(TranspileTestCase):
                 print(x.ctime())
             """)
 
-    def test_one_arg_w_day(self):
-        self.assertCodeExecution("""
-            from datetime import date
-            try:
-                date(day=71)
-            except TypeError as err:
-                print(err)        
-            """)
 
-        
 class DateTimeTests(TranspileTestCase):
 
     def test_creation(self):
-       self.assertCodeExecution("""
-           from datetime import datetime
-           print(datetime(1,2,3))
-           print(datetime(1,2,day=3))
-           print(datetime(1,month=2,day=3))
-           print(datetime(year=1,month=2,day=3))
+        self.assertCodeExecution("""
+            from datetime import datetime
+            print(datetime(1,2,3))
+            print(datetime(1,2,day=3))
+            print(datetime(1,month=2,day=3))
+            print(datetime(year=1,month=2,day=3))
 
-           print(datetime(11,12,13))
-           print(datetime(111,12,13))
-           print(datetime(1111,12,13))
+            print(datetime(11,12,13))
+            print(datetime(111,12,13))
+            print(datetime(1111,12,13))
 
-           print(datetime(1,1,1,0,0,0))
-           print(datetime(1,1,1,0,0,0,0))
-           print(datetime(9999,12,31,23,59,59))
-           print(datetime(9999,12,31,23,59,59,999999))
+            print(datetime(1,1,1,0,0,0))
+            print(datetime(1,1,1,0,0,0,0))
+            print(datetime(9999,12,31,23,59,59))
+            print(datetime(9999,12,31,23,59,59,999999))
 
-           print(datetime(1,2,3,4,5,6,7))
-           print(datetime(1,2,3,4,5,6,1117))
-           print(datetime(1,2,3,4,5,6,111117))
-           """)
-    
+            print(datetime(1,2,3,4,5,6,7))
+            print(datetime(1,2,3,4,5,6,1117))
+            print(datetime(1,2,3,4,5,6,111117))
+            """)
+
     def test_date(self):
         self.assertCodeExecution("""
             from datetime import datetime
@@ -158,7 +133,7 @@ class DateTimeTests(TranspileTestCase):
             print (datetime(1993,5,17,20,30,12,34).second)
             print (datetime(1993,5,17,20,30,12,34).microsecond)
         """)
-    @expectedFailure
+
     def test_year_too_large(self):
         self.assertCodeExecution("""
         from datetime import datetime
@@ -166,9 +141,8 @@ class DateTimeTests(TranspileTestCase):
             datetime(19999, 10, 11)
         except ValueError as err:
             print(err)
-        
-        """)    
-    @expectedFailure
+        """)
+
     def test_year_too_small(self):
         self.assertCodeExecution("""
         from datetime import datetime
@@ -176,9 +150,8 @@ class DateTimeTests(TranspileTestCase):
             datetime(0, 10, 11)
         except ValueError as err:
             print(err)
-        
-        """)  
-    @expectedFailure
+        """)
+
     def test_month_too_large(self):
         self.assertCodeExecution("""
         from datetime import datetime
@@ -186,20 +159,18 @@ class DateTimeTests(TranspileTestCase):
             datetime(14, 41, 11)
         except ValueError as err:
             print(err)
-        
-        """)  
-    @expectedFailure
+        """)
+
     def test_month_too_small(self):
-            self.assertCodeExecution("""
+        self.assertCodeExecution("""
         from datetime import datetime
         try:
             datetime(0, 0, 11)
         except ValueError as err:
             print(err)
-        
-        """)  
+        """)
 
-            
+
 class TimeDeltaTests(TranspileTestCase):
 
     def test_creation(self):
@@ -225,7 +196,7 @@ class TimeDeltaTests(TranspileTestCase):
             from datetime import timedelta
             print(timedelta(14, 10, 1, weeks=11).total_seconds())
         """)
-    
+
     def test_addition(self):
         self.assertCodeExecution("""
             from datetime import timedelta
@@ -234,7 +205,6 @@ class TimeDeltaTests(TranspileTestCase):
             t = timedelta(17, 2, 100)
             print(t)
             print(t+d)
-            
         """)
 
     def test_positive(self):
@@ -251,5 +221,4 @@ class TimeDeltaTests(TranspileTestCase):
             from datetime import timedelta
             print(timedelta(1, 86401, 1))
             print(timedelta(1, 6401,1000000))
-            
         """)
