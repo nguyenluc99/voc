@@ -153,25 +153,12 @@ public class DateTimeTests {
     public void test_fromisoformat() {
 
         Str isoString = new Str("9999-12-31");
+
         DateTime fromIso = (DateTime) DateTime.fromisoformat(isoString);
+
         assertEquals(fromIso.__str__(), new Str("9999-12-31 00:00:00"));
-
-        isoString = new Str("2011-11-04T00:05:23");
-        fromIso = (DateTime) DateTime.fromisoformat(isoString);
-        assertEquals(fromIso.__str__(), new Str("2011-11-04 00:05:23"));
-
-        isoString = new Str("2011-11-04 00:05:23.283");
-        fromIso = (DateTime) DateTime.fromisoformat(isoString);
-        assertEquals(fromIso.__str__(), new Str("2011-11-04 00:05:23.283000"));
-
-        isoString = new Str("2011-11-04 24:59:59.999999");
-        fromIso = (DateTime) DateTime.fromisoformat(isoString);
-        assertEquals(fromIso.__str__(), new Str("2011-11-04 24:59:59.999999"));
-
-        isoString = new Str("0001-01-01 00:00:00.000000");
-        fromIso = (DateTime) DateTime.fromisoformat(isoString);
-        assertEquals(fromIso.__str__(), new Str("0001-01-01 00:00:00"));
     }
+
 }
 
 
