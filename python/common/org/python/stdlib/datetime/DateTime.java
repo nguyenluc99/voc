@@ -1,13 +1,12 @@
 package org.python.stdlib.datetime;
 
 import java.util.Collections;
-import java.lang.Comparable;
 import java.lang.Character;
 import java.lang.Math;
 import org.python.types.Str;
 import org.python.types.Int;
 
-public class DateTime extends org.python.types.Object implements Comparable{
+public class DateTime extends org.python.types.Object{
     private final int YEAR_INDEX = 0;
     private final int MONTH_INDEX = 1;
     private final int DAY_INDEX = 2;
@@ -47,17 +46,6 @@ public class DateTime extends org.python.types.Object implements Comparable{
 
     @org.python.Attribute
     public static final org.python.Object max = __max__();
-
-    public int compareTo(DateTime date) {
-
-        for (int i = 0; i <= MICROSECOND_INDEX; i++) {
-            int comparison = this.timeUnits[i].compareTo(date.timeUnits[i]);
-            if (comparison != 0) {
-                return comparison;
-            }
-        }
-        return 0;
-    }
 
     public DateTime(org.python.Object[] args, java.util.Map<java.lang.String, org.python.Object> kwargs) {
         super();
@@ -170,7 +158,10 @@ public class DateTime extends org.python.types.Object implements Comparable{
         return new DateTime(args, Collections.emptyMap());
     }
 
-    @org.python.Method(__doc__ = "")
+    @org.python.Method(
+        __doc__ = "Returns a DateTime object based on the inputted iso String",
+        args = {"isoString"}
+    )
     public static org.python.Object fromisoformat(org.python.types.Str isoString) {
         //switch case copied from Adam
         switch(isoString.typeName()) {
@@ -256,6 +247,153 @@ public class DateTime extends org.python.types.Object implements Comparable{
     @org.python.Method(__doc__ = "returns microsecond")
         public org.python.types.Str __microsecond__() {
         return new org.python.types.Str(this.timeUnits[MICROSECOND_INDEX] + "");
+    }
+
+    @org.python.Method(
+        __doc__ = "Return self==value.",
+        args = {"other"}
+    )
+        public org.python.types.Object __eq__(org.python.Object other) {
+        if (other instanceof DateTime) {
+            DateTime otherDateTime = (DateTime) other;
+            org.python.types.Bool trueObject = org.python.types.Bool.TRUE;
+            if (this.year.__eq__(otherDateTime.year) == trueObject) {
+                if (this.month.__eq__(otherDateTime.month) == trueObject) {
+                    if (this.day.__eq__(otherDateTime.day) == trueObject) {
+                        if (this.hour.__eq__(otherDateTime.hour) == trueObject) {
+                            if (this.minute.__eq__(otherDateTime.minute) == trueObject) {
+                                if (this.second.__eq__(otherDateTime.second) == trueObject) {
+                                    if (this.microsecond.__eq__(otherDateTime.microsecond) == trueObject) {
+                                        return org.python.types.Bool.TRUE;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return org.python.types.Bool.FALSE;
+        }
+        throw new org.python.exceptions.TypeError("DateTime comparison is only implemented for other DateTime objects");
+    }
+
+    @org.python.Method(
+        __doc__ = "Return self>value.",
+        args = {"other"}
+    )
+    public org.python.types.Object __gt__(org.python.Object other) {
+        if (other instanceof DateTime) {
+            DateTime otherDateTime = (DateTime) other;
+            org.python.types.Bool trueObject = org.python.types.Bool.TRUE;
+            if (this.year.__gt__(otherDateTime.year) == trueObject) {
+                return org.python.types.Bool.TRUE;
+
+            } else if (this.year.__eq__(otherDateTime.year) == trueObject) {
+                if (this.month.__gt__(otherDateTime.month) == trueObject) {
+                    return org.python.types.Bool.TRUE;
+
+                } else if (this.month.__eq__(otherDateTime.month) == trueObject) {
+                    if (this.day.__gt__(otherDateTime.day) == trueObject) {
+                        return org.python.types.Bool.TRUE;
+
+                    } else if (this.day.__eq__(otherDateTime.day) == trueObject){
+                        if (this.hour.__gt__(otherDateTime.hour) == trueObject) {
+                            return org.python.types.Bool.TRUE;
+
+                        } else if (this.day.__eq__(otherDateTime.hour) == trueObject) {
+                            if (this.minute.__gt__(otherDateTime.minute) == trueObject) {
+                                return org.python.types.Bool.TRUE;
+
+                            } else if (this.day.__eq__(otherDateTime.minute) == trueObject) {
+                                if (this.second.__gt__(otherDateTime.second) == trueObject){
+                                    return org.python.types.Bool.TRUE;
+
+                                } else if (this.day.__eq__(otherDateTime.second) == trueObject) {
+                                    if (this.microsecond.__gt__(otherDateTime.microsecond) == trueObject) {
+                                        return org.python.types.Bool.TRUE;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return org.python.types.Bool.FALSE;
+        }
+        throw new org.python.exceptions.TypeError("DateTime comparison is only implemented for other DateTime objects");
+    }
+
+    @org.python.Method(
+        __doc__ = "Return self>=value.",
+        args = {"other"}
+    )
+    public org.python.types.Object __ge__(org.python.Object other) {
+        if (other instanceof DateTime) {
+            DateTime otherDateTime = (DateTime) other;
+            org.python.types.Bool trueObject = org.python.types.Bool.TRUE;
+            if (this.year.__gt__(otherDateTime.year) == trueObject) {
+                return org.python.types.Bool.TRUE;
+
+            } else if (this.year.__eq__(otherDateTime.year) == trueObject) {
+                if (this.month.__gt__(otherDateTime.month) == trueObject) {
+                    return org.python.types.Bool.TRUE;
+
+                } else if (this.month.__eq__(otherDateTime.month) == trueObject) {
+                    if (this.day.__gt__(otherDateTime.day) == trueObject) {
+                        return org.python.types.Bool.TRUE;
+
+                    } else if (this.day.__eq__(otherDateTime.day) == trueObject){
+                        if (this.hour.__gt__(otherDateTime.hour) == trueObject) {
+                            return org.python.types.Bool.TRUE;
+
+                        } else if (this.day.__eq__(otherDateTime.hour) == trueObject) {
+                            if (this.minute.__gt__(otherDateTime.minute) == trueObject) {
+                                return org.python.types.Bool.TRUE;
+
+                            } else if (this.day.__eq__(otherDateTime.minute) == trueObject) {
+                                if (this.second.__gt__(otherDateTime.second) == trueObject){
+                                    return org.python.types.Bool.TRUE;
+
+                                } else if (this.day.__eq__(otherDateTime.second) == trueObject) {
+                                    if (this.microsecond.__gt__(otherDateTime.microsecond) == trueObject) {
+                                        return org.python.types.Bool.TRUE;
+
+                                    } else if (this.day.__eq__(otherDateTime.microsecond) == trueObject) {
+                                        return org.python.types.Bool.TRUE;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return org.python.types.Bool.FALSE;
+        }
+        throw new org.python.exceptions.TypeError("DateTime comparison is only implemented for other DateTime objects");
+    }
+
+    @org.python.Method(
+        __doc__ = "Return self<value.",
+        args = {"other"}
+    )
+    public org.python.types.Object __lt__(org.python.Object other) {
+        if (this.__ge__(other) == org.python.types.Bool.TRUE) {
+            return org.python.types.Bool.FALSE;
+        } else {
+            return org.python.types.Bool.TRUE;
+        }
+    }
+
+    @org.python.Method(
+        __doc__ = "Return self<=value.",
+        args = {"other"}
+    )
+    public org.python.types.Object __le__(org.python.Object other) {
+        if (this.__gt__(other) == org.python.types.Bool.TRUE) {
+            return org.python.types.Bool.FALSE;
+        } else {
+            return org.python.types.Bool.TRUE;
+        }
     }
 
     @org.python.Method(__doc__ = "")

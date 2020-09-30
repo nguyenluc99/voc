@@ -16,6 +16,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;    
 
 public class DateTimeTests {
+
+    /**
+     * Test creation of the DateTime object
+     */
     @Test
     public void test_creation() {
         Int[] args = {Int.getInt(1), Int.getInt(2), Int.getInt(3)};
@@ -118,20 +122,170 @@ public class DateTimeTests {
         assertThrows(ValueError.class, () -> new DateTime(finalArgs6, Collections.emptyMap()));
     }
 
+    /**
+     * Test Comparison equal
+     */
     @Test
-    public void test_comparator() {
-        Int[] args = {Int.getInt(5), Int.getInt(6), Int.getInt(7)};
+    public void test___eq__() {
+        Int[] args = {Int.getInt(1), Int.getInt(1), Int.getInt(1),Int.getInt(1), Int.getInt(1), Int.getInt(1), Int.getInt(1)};
         DateTime date1 = new DateTime(args,Collections.emptyMap());
         DateTime date2 = new DateTime(args,Collections.emptyMap());
-        assertEquals(date1.compareTo(date2), 0);
+        assertEquals(date1.__eq__((org.python.Object) date2), org.python.types.Bool.TRUE);
 
-        args[0] = Int.getInt(6);
+        args[0] = Int.getInt(2);
         date2 = new DateTime(args,Collections.emptyMap());
-        assertEquals(date1.compareTo(date2), -1);
+        assertEquals(date1.__eq__(date2), org.python.types.Bool.FALSE);
 
-        args[0] = Int.getInt(4);
+        args[0] = Int.getInt(1);
+        args[1] = Int.getInt(2);
         date2 = new DateTime(args,Collections.emptyMap());
-        assertEquals(date1.compareTo(date2), 1);
+        assertEquals(date1.__eq__(date2), org.python.types.Bool.FALSE);
+
+        args[1] = Int.getInt(1);
+        args[2] = Int.getInt(2);
+        date2 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.__eq__(date2), org.python.types.Bool.FALSE);
+
+        args[2] = Int.getInt(1);
+        args[3] = Int.getInt(2);
+        date2 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.__eq__(date2), org.python.types.Bool.FALSE);
+
+        args[3] = Int.getInt(1);
+        args[4] = Int.getInt(2);
+        date2 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.__eq__(date2), org.python.types.Bool.FALSE);
+
+        args[4] = Int.getInt(1);
+        args[5] = Int.getInt(2);
+        date2 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.__eq__(date2), org.python.types.Bool.FALSE);
+
+        args[5] = Int.getInt(1);
+        args[6] = Int.getInt(2);
+        date2 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.__eq__(date2), org.python.types.Bool.FALSE);
+
+    }
+
+    /**
+     * Test Comparison greater than
+     */
+    @Test
+    public void test___gt__() {
+        Int[] args = {Int.getInt(1), Int.getInt(1), Int.getInt(1),Int.getInt(1), Int.getInt(1), Int.getInt(1), Int.getInt(1)};
+        DateTime date1 = new DateTime(args,Collections.emptyMap());
+        DateTime date2 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.__gt__((org.python.Object) date2), org.python.types.Bool.FALSE);
+
+        args[0] = Int.getInt(2);
+        date1 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.__gt__(date2), org.python.types.Bool.TRUE);
+
+        args[0] = Int.getInt(1);
+        args[1] = Int.getInt(2);
+        date1 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.__gt__(date2), org.python.types.Bool.TRUE);
+
+        args[1] = Int.getInt(1);
+        args[2] = Int.getInt(2);
+        date1 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.__gt__(date2), org.python.types.Bool.TRUE);
+
+        args[2] = Int.getInt(1);
+        args[3] = Int.getInt(2);
+        date1 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.__gt__(date2), org.python.types.Bool.TRUE);
+
+        args[3] = Int.getInt(1);
+        args[4] = Int.getInt(2);
+        date1 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.__gt__(date2), org.python.types.Bool.TRUE);
+
+        args[4] = Int.getInt(1);
+        args[5] = Int.getInt(2);
+        date1 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.__gt__(date2), org.python.types.Bool.TRUE);
+
+        args[5] = Int.getInt(1);
+        args[6] = Int.getInt(2);
+        date1 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.__gt__(date2), org.python.types.Bool.TRUE);
+    }
+
+    /**
+     * Test Comparison greater or equal
+     */
+    @Test
+    public void test___ge__() {
+        Int[] args = {Int.getInt(1), Int.getInt(1), Int.getInt(1),Int.getInt(1), Int.getInt(1), Int.getInt(1), Int.getInt(1)};
+        DateTime date1 = new DateTime(args,Collections.emptyMap());
+        DateTime date2 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.__ge__((org.python.Object) date2), org.python.types.Bool.TRUE);
+
+        args[0] = Int.getInt(2);
+        date2 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.__ge__(date2), org.python.types.Bool.FALSE);
+
+        args[0] = Int.getInt(1);
+        args[1] = Int.getInt(2);
+        date2 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.__ge__(date2), org.python.types.Bool.FALSE);
+
+        args[1] = Int.getInt(1);
+        args[2] = Int.getInt(2);
+        date2 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.__ge__(date2), org.python.types.Bool.FALSE);
+
+        args[2] = Int.getInt(1);
+        args[3] = Int.getInt(2);
+        date2 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.__ge__(date2), org.python.types.Bool.FALSE);
+
+        args[3] = Int.getInt(1);
+        args[4] = Int.getInt(2);
+        date2 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.__ge__(date2), org.python.types.Bool.FALSE);
+
+        args[4] = Int.getInt(1);
+        args[5] = Int.getInt(2);
+        date2 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.__ge__(date2), org.python.types.Bool.FALSE);
+
+        args[5] = Int.getInt(1);
+        args[6] = Int.getInt(2);
+        date2 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.__ge__(date2), org.python.types.Bool.FALSE);
+    }
+
+    /**
+     * Test comparison less than
+     */
+    @Test
+    public void test___lt__() {
+        Int[] args = {Int.getInt(1), Int.getInt(1), Int.getInt(1), Int.getInt(1), Int.getInt(1), Int.getInt(1), Int.getInt(1)};
+        DateTime date1 = new DateTime(args, Collections.emptyMap());
+        DateTime date2 = new DateTime(args, Collections.emptyMap());
+        assertEquals(date1.__lt__((org.python.Object) date2), org.python.types.Bool.FALSE);
+
+        args[0] = Int.getInt(2);
+        date2 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.__lt__(date2), org.python.types.Bool.TRUE);
+    }
+
+    /**
+     * Test comparison less or equal
+     */
+    @Test
+    public void test___le__() {
+        Int[] args = {Int.getInt(1), Int.getInt(1), Int.getInt(1), Int.getInt(1), Int.getInt(1), Int.getInt(1), Int.getInt(1)};
+        DateTime date1 = new DateTime(args, Collections.emptyMap());
+        DateTime date2 = new DateTime(args, Collections.emptyMap());
+        assertEquals(date1.__le__((org.python.Object) date2), org.python.types.Bool.TRUE);
+
+        args[0] = Int.getInt(2);
+        date2 = new DateTime(args,Collections.emptyMap());
+        assertEquals(date1.__le__(date2), org.python.types.Bool.TRUE);
     }
 
     @Test
@@ -186,6 +340,9 @@ public class DateTimeTests {
         assertEquals(new Str(dtf1.format(now) + separator + dtf2.format(now)), new Str(java_iso_reduced));
     }
 
+    /**
+     * Tests creation DateTime objects from iso format strings.
+     */
     @Test
     public void test_fromisoformat() {
 
