@@ -155,8 +155,11 @@ public class DateTime extends org.python.types.Object implements Comparable{
 
     @org.python.Method(__doc__ = "")
         public org.python.Object date() {
-        org.python.Object[] args = { org.python.types.Int.getInt(this.timeUnits[YEAR_INDEX]), org.python.types.Int.getInt(this.timeUnits[MONTH_INDEX]),
-            org.python.types.Int.getInt(this.timeUnits[DAY_INDEX]) };
+        org.python.Object[] args = { 
+			org.python.types.Int.getInt(this.timeUnits[YEAR_INDEX]), 
+			org.python.types.Int.getInt(this.timeUnits[MONTH_INDEX]),
+			org.python.types.Int.getInt(this.timeUnits[DAY_INDEX]) 
+		};
         return new Date(args, Collections.emptyMap());
 	}
 	
@@ -164,9 +167,15 @@ public class DateTime extends org.python.types.Object implements Comparable{
     @org.python.Method(__doc__ = "")
     public static org.python.Object today() {
         java.time.LocalDateTime today = java.time.LocalDateTime.now();
-        org.python.Object[] args = { org.python.types.Int.getInt(today.getYear()), org.python.types.Int.getInt(today.getMonth().getValue()),
-            org.python.types.Int.getInt(today.getDayOfMonth()), org.python.types.Int.getInt(today.getHour()), org.python.types.Int.getInt(today.getMinute()),
-            org.python.types.Int.getInt(today.getSecond()), org.python.types.Int.getInt(today.getNano() / 1000) };
+		org.python.Object[] args = { 
+			org.python.types.Int.getInt(today.getYear()),
+			org.python.types.Int.getInt(today.getMonth().getValue()),
+			org.python.types.Int.getInt(today.getDayOfMonth()),
+			org.python.types.Int.getInt(today.getHour()),
+			org.python.types.Int.getInt(today.getMinute()),
+			org.python.types.Int.getInt(today.getSecond()),
+			org.python.types.Int.getInt(today.getNano() / 1000) 
+		};
         return new DateTime(args, Collections.emptyMap());
     }
 
@@ -352,10 +361,13 @@ public class DateTime extends org.python.types.Object implements Comparable{
         }
 
         org.python.types.Str mic_py = (org.python.types.Str) this.microsecond;
-        String mic_str = (String) mic_py.toJava();
+		String mic_str = (String) mic_py.toJava();
+		while(mic_str.length() < 6){
+			mic_str = "0" + mic_str;
+		}
 
         String iso_time;
-        if (mic_str == "0") {
+        if (mic_str.equals("000000")) {
             iso_time = y_str + "-" + m_str + "-" + d_str + separator + h_str + ":" +  min_str + ":" + s_str;
         } else {
             iso_time =  y_str + "-" + m_str + "-" + d_str  + separator + h_str + ":" +  min_str + ":" + s_str + "." + mic_str;
