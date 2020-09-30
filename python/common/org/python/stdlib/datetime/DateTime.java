@@ -289,17 +289,16 @@ public class DateTime extends org.python.types.Object implements Comparable{
         String y_str = (String) y_py.toJava();
         double y = Double.parseDouble(y_str);
 
-        org.python.types.Str m_py = (org.python.types.Str) this.year;
+        org.python.types.Str m_py = (org.python.types.Str) this.month;
         String m_str = (String) m_py.toJava();
         double m = Double.parseDouble(m_str);
 
-        org.python.types.Str d_py = (org.python.types.Str) this.year;
+        org.python.types.Str d_py = (org.python.types.Str) this.day;
         String d_str = (String) d_py.toJava();
-        double d = Double.parseDouble(m_str);
-
-        java.util.Date myCalendar = new java.util.GregorianCalendar((int) y, (int) m , (int) d).getTime();
+        double d = Double.parseDouble(d_str);
+	
         java.util.Calendar c = java.util.Calendar.getInstance();
-        c.setTime(myCalendar);
+        c.set((int) y, (int) m - 1, (int) d, 0, 0);
         int day = c.get(java.util.Calendar.DAY_OF_WEEK);
         int[] convertToPython = { 6, 0, 1, 2, 3, 4, 5 };
         return org.python.types.Int.getInt(convertToPython[day - 1]);

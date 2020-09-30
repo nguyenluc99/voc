@@ -166,7 +166,7 @@ public class DateTimeTests {
         int day = calendar.get(Calendar.DAY_OF_WEEK);
         int[] convertToPython = { 6, 0, 1, 2, 3, 4, 5 };
         long week_day = convertToPython[day-1]; 
-        assertEquals(python_date_full.weekday().toJava(), week_day);
+        assertEquals(week_day, python_date_full.weekday().toJava());
     }
 
     @Test 
