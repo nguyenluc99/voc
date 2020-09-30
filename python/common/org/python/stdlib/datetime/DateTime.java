@@ -178,18 +178,18 @@ public class DateTime extends org.python.types.Object implements Comparable{
                 org.python.types.Str t = (org.python.types.Str) isoString;
                 break;
             default:
-                throw new org.python.exceptions.TypeError("isoformat() argument 1 must be a unicode character, not " + isoString.typeName());
+                throw new org.python.exceptions.TypeError("fromisoformat() argument 1 must be a unicode character, not " + isoString.typeName());
         }
         String javaString = (String) isoString.toJava();
-        //datelist = {year, month, day}
-        int[] dateList = {0, 0, 0};
+        //datelist = {year, month, day, hour, minute, second, millisecond}
+        int[] dateList = {0, 0, 0, 0, 0, 0, 0};
         int multiplyer = 0;
+        int length = javaString.length();
 
-        for (int i = 0; i < javaString.length(); i++) {
+        for (int i = 0; i < length; i++) {
             char c = javaString.charAt(i);
             if (i < 4) {
-                // i == 0, multiplyer == 1000 : i == 1, multiplyer == 100
-                // i == 2, multiplyer == 10 : i == 3, multiplyer == 1
+                // i == 0, multiplyer == 1000 : i == 1, multiplyer == 100, i == 2, multiplyer == 10 : i == 3, multiplyer == 1
                 multiplyer = (int) Math.pow(10,3-i);
                 dateList[0] = dateList[0] + (Character.getNumericValue(c)*multiplyer);
             } else if (i > 4 && i < 7) {
@@ -200,10 +200,26 @@ public class DateTime extends org.python.types.Object implements Comparable{
                 // i == 8, multiplyer == 10 : i == 9, multiplyer == 1
                 multiplyer = (int) Math.pow(10,9-i);
                 dateList[2] = dateList[2] + (Character.getNumericValue(c)*multiplyer);
+            } else if (i > 10 && i < 13) {
+                // i == 11, multiplyer == 10 : i == 12, multiplyer == 1
+                multiplyer = (int) Math.pow(10,12-i);
+                dateList[3] = dateList[3] + (Character.getNumericValue(c)*multiplyer);
+            } else if (i >13 && i < 16) {
+                // i == 14, multiplyer == 10 : i == 15, multiplyer == 1
+                multiplyer = (int) Math.pow(10,15-i);
+                dateList[4] = dateList[4] + (Character.getNumericValue(c)*multiplyer);
+            } else if (i > 16 && i < 19) {
+                // i == 17, multiplyer == 10 : i == 18, multiplyer == 1
+                multiplyer = (int) Math.pow(10,18-i);
+                dateList[5] = dateList[5] + (Character.getNumericValue(c)*multiplyer);
+            } else if (i > 19) {
+                multiplyer = (int) Math.pow(10,25-i);
+                dateList[6] = dateList[6] + (Character.getNumericValue(c)*multiplyer);
             }
 
         }
-        org.python.Object[] args = {Int.getInt(dateList[0]), Int.getInt(dateList[1]), Int.getInt(dateList[2])};
+        org.python.Object[] args = {Int.getInt(dateList[0]), Int.getInt(dateList[1]), Int.getInt(dateList[2]),
+            Int.getInt(dateList[3]), Int.getInt(dateList[4]), Int.getInt(dateList[5]),Int.getInt(dateList[6])};
         return new DateTime(args, Collections.emptyMap());
     }
 
