@@ -50,10 +50,10 @@ public class Date extends org.python.types.Object {
     private final int maxDay = 31;
     private final int minDate = 1;
 
-    private final Map<String, Integer> weekdays;
+    private Map<String, Object> kwargs;
+    private Object[] args;
 
-    private final Map<String, Object> kwargs;
-    private final Object[] args;
+    private final Map<String, Integer> weekdays;
 
     @org.python.Attribute
     public final org.python.types.Int year;
@@ -450,6 +450,7 @@ public class Date extends org.python.types.Object {
         }
         return new Date(new Object[]{year, month, day}, new HashMap<>());
     }
+
     /**
      * Gets the int value of org.python.Object
      */

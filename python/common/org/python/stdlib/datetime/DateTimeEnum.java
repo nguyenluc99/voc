@@ -2,7 +2,7 @@ package org.python.stdlib.datetime;
 
 /**
  * Enum class for datetime.date
- * Last edited: 30/09/2020
+ * Last edited: 01/10/2020
  */
 public enum DateTimeEnum {
 
