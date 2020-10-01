@@ -1,3 +1,4 @@
+apache-ant-1.10.7*
 *.pyc
 *~
 .*.sw[op]
@@ -27,3 +28,5 @@ tests/tmp*
 /gen
 /stdlib_tests/env/
 voc.iml
+/out
+python/python.iml

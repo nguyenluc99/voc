@@ -3,8 +3,15 @@
     Build Python support libraries for voc
   </description>
 
+  <path id="test.classpath">
+    <pathelement path="build/java-test"/>
+    <pathelement path="build/java"/>
+    <fileset dir="${ant.home}/lib" includes="*.jar" />
+  </path>
+
   <target name="compile" description="Compile the Oracle-specific source">
     <mkdir dir="${build}/java"/>
+    <mkdir dir="${build}/test-report"/>
     <javac debug="true"
            debuglevel="lines,vars,source"
            includeantruntime="false"
@@ -13,6 +20,47 @@
       <src path="${src}/java" />
     </javac>
   </target>
+
+    <target name="compile-test">
+        <mkdir dir="${build}/java-test"/>
+        <javac destdir="${build}/java-test"
+               classpathref="test.classpath"
+               srcdir="${src}/java-test"
+               includeantruntime="false"/>
+
+        <mkdir dir="${build}/test-report"/>
+    </target>
+
+  <!-- https://junit.org/junit5/docs/snapshot/user-guide/#running-tests-build-ant -->
+  <target name="test.junit.launcher" depends="compile-test">
+    <junitlauncher haltOnFailure="true" printSummary="true">
+      <classpath refid="test.classpath"/>
+      <testclasses outputdir="${build}/test-report">
+        <fileset dir="${build}/java-test">
+          <include name="**/*Tests.class"/>
+        </fileset>
+        <listener type="legacy-xml" sendSysOut="true" sendSysErr="true"/>
+        <listener type="legacy-plain" sendSysOut="true" />
+      </testclasses>
+    </junitlauncher>
+  </target>
+
+  <!-- https://junit.org/junit5/docs/current/user-guide/#running-tests-console-launcher -->
+  <target name="test.console.launcher" depends="compile-test">
+    <java classpathref="test.classpath" classname="org.junit.platform.console.ConsoleLauncher" fork="true" failonerror="true">
+      <arg value="--scan-classpath"/>
+      <arg line="--reports-dir build/test-report"/>
+    </java>
+    <junitreport todir="build/test-report">
+      <fileset dir="build/test-report">
+        <include name="TEST-*.xml"/>
+      </fileset>
+      <report format="frames" todir="build/test-report/html"/>
+    </junitreport>
+  </target>
+
+  <target name="test" depends="test.console.launcher, test.junit.launcher" />
+
 
   <target name="compile_stdlib" description="Compile the standard library">
     <exec executable="python">
@@ -57,8 +105,10 @@
           overwrite="true" />
   </target>
 
+
   <target name="clean" description="Clean up">
     <delete dir="${build}"/>
     <delete dir="${dist}"/>
   </target>
+
 </project>
