@@ -14,7 +14,7 @@ public class ListWorkload {
         ListWorkload.__setitem__Workload();
         ListWorkload.countWorkload();
 
-        Integer sizeOfList = Integer.valueOf(1000);
+        Integer sizeOfList = Integer.valueOf(10000);
         ArrayList arrayList1 = new ArrayList();
         ArrayList arrayList2 = new ArrayList();
         ArrayList arrayList3 = new ArrayList();
@@ -26,9 +26,9 @@ public class ListWorkload {
             arrayList3.add(temp);
         }
         // ascending order
-        WorkloadTest.testBubbleSort(arrayList1);
-        WorkloadTest.testComparator(arrayList2);
-        WorkloadTest.testCollection(arrayList3);
+        ListWorkload.testBubbleSort(arrayList1);
+        ListWorkload.testComparator(arrayList2);
+        ListWorkload.testCollection(arrayList3);
 
     }
 
@@ -108,10 +108,10 @@ public class ListWorkload {
     }
 
     public static void testComparator(ArrayList<Integer> arr) {
-        arr.sort(new WorkloadTest.MyCompare());
+        arr.sort(new ListWorkload.MyCompare());
     }
 
     public static void testCollection(ArrayList<Integer> arr) {
-        Collections.sort(arr, new WorkloadTest.MyCompare());
+        Collections.sort(arr, new ListWorkload.MyCompare());
     }
 }
