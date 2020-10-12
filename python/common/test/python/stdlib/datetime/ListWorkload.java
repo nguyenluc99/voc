@@ -34,5 +34,4 @@ public class ListWorkload {
             list.__delitem__(org.python.types.Int.getInt(index));
         }
     }
-
 }
