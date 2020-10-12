@@ -114,5 +114,4 @@ public class ListWorkload {
     public static void testCollection(ArrayList<Integer> arr) {
         Collections.sort(arr, new WorkloadTest.MyCompare());
     }
-
 }
