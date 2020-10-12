@@ -6,8 +6,10 @@ import java.util.Random;
 public class ListWorkload {
 
     public static void main(String[] args) {
-        ListWorkload.workload1();
-        ListWorkload.workload2();
+        //ListWorkload.workload1();
+        //ListWorkload.workload2();
+        ListWorkload.__setitem__Workload();
+        ListWorkload.countWorkload();
     }
 
     // Remove at beginning (good for linked-list, bad for array-list)
@@ -34,4 +36,32 @@ public class ListWorkload {
             list.__delitem__(org.python.types.Int.getInt(index));
         }
     }
+<<<<<<< HEAD
+=======
+
+    public static void __setitem__Workload() {
+        org.python.types.List list = new org.python.types.List();
+
+
+        for (int i = 0; i < 10000; i++) {
+            list.append(org.python.types.Int.getInt(i));
+        }
+
+        for (int i = 0; i < 10000; i++) {
+            list.__setitem__(org.python.types.Int.getInt(i), org.python.types.Int.getInt(1337));
+        }
+    }
+    public static void countWorkload() {
+        org.python.types.List list = new org.python.types.List();
+
+        Random rand = new Random();
+        for (int i = 0; i < 1000; i++) {
+            list.append(org.python.types.Int.getInt(rand.nextInt(10) ));
+        }
+
+        for (int i = 0; i < 1000; i++) {
+            list.count(org.python.types.Int.getInt(i%10));
+        }
+    }
+>>>>>>> e792bba4e47e5dd1a7878b60de4c8ae775da5b5e
 }
