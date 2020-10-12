@@ -36,8 +36,7 @@ public class ListWorkload {
             list.__delitem__(org.python.types.Int.getInt(index));
         }
     }
-<<<<<<< HEAD
-=======
+
 
     public static void __setitem__Workload() {
         org.python.types.List list = new org.python.types.List();
@@ -63,5 +62,5 @@ public class ListWorkload {
             list.count(org.python.types.Int.getInt(i%10));
         }
     }
->>>>>>> e792bba4e47e5dd1a7878b60de4c8ae775da5b5e
+
 }
