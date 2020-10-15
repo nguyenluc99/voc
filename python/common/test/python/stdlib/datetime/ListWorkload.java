@@ -8,8 +8,8 @@ import java.util.Random;
 public class ListWorkload {
 
     public static void main(String[] args) {
-        //ListWorkload.workload1();
-        //ListWorkload.workload2();
+        ListWorkload.workload1();
+        ListWorkload.workload2();
         ListWorkload.__setitem__Workload();
         ListWorkload.countWorkload();
 
@@ -20,7 +20,7 @@ public class ListWorkload {
     // Remove at beginning (good for linked-list, bad for array-list)
     public static void workload1() {
         org.python.types.List list = new org.python.types.List();
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < 10000; i++) {
             list.append(org.python.types.Int.getInt(i));
         }
         while (list.__len__().value > 0) {
@@ -31,7 +31,7 @@ public class ListWorkload {
     // Remove at random index (good for array-list, bad for linked-list
     public static void workload2() {
         org.python.types.List list = new org.python.types.List();
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < 10000; i++) {
             list.append(org.python.types.Int.getInt(i));
         }
 
